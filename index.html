@@ -4,824 +4,257 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tomoharu Hayakawa</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #020408;
-    --bg2: #060c14;
-    --bg3: #0a1424;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --accent3: #10b981;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --border: rgba(0, 212, 255, 0.15);
-    --glow: 0 0 20px rgba(0,212,255,0.15);
-    --mono: 'Space Mono', monospace;
-    --sans: 'Outfit', sans-serif;
+    --bg:#020408;--bg2:#060c14;--bg3:#0a1424;
+    --accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;
+    --text:#e2e8f0;--muted:#64748b;--border:rgba(0,212,255,0.15);
+    --mono:'Space Mono',monospace;
+    --sans:'Outfit',sans-serif;
+    --jp:'Noto Sans JP',sans-serif;
   }
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;cursor:none;}
+  body.lang-ja{font-family:var(--jp);}
+  body.lang-ja .hero-name{letter-spacing:0.04em;}
 
-  html { scroll-behavior: smooth; }
+  /* Cursor */
+  #cursor{position:fixed;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:screen;}
+  #cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,212,255,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* Custom cursor */
-  #cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    background: var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
-    mix-blend-mode: screen;
-  }
-  #cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid rgba(0,212,255,0.5);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
-  }
-
-  /* Stars background */
-  #stars-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
+  /* Stars */
+  #stars-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.6;}
 
   /* Grid overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
 
   /* Nav */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-    padding: 1.25rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(2, 4, 8, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--muted); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-decoration: none;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; left: 0;
-    width: 0; height: 1px;
-    background: var(--accent);
-    transition: width 0.3s;
-  }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-links a:hover::after { width: 100%; }
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.25rem 3rem;display:flex;align-items:center;justify-content:space-between;background:rgba(2,4,8,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:var(--mono);font-size:.85rem;color:var(--accent);letter-spacing:.1em;text-decoration:none;}
+  .nav-logo span{color:var(--muted);}
+  .nav-links{display:flex;gap:1.8rem;list-style:none;}
+  .nav-links a{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;position:relative;}
+  .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--accent);transition:width .3s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent);}
+  .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+  .nav-right{display:flex;align-items:center;gap:1.5rem;}
+
+  /* Lang toggle */
+  .lang-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+  .lang-btn{padding:.4rem .8rem;cursor:pointer;color:var(--muted);background:transparent;border:none;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;transition:all .2s;}
+  .lang-btn.active{background:var(--accent);color:var(--bg);font-weight:700;}
+  .lang-btn:not(.active):hover{color:var(--accent);background:rgba(0,212,255,.08);}
+
+  /* Lang fade transition */
+  .t-fade{transition:opacity .25s ease;}
+  body.switching .t-fade{opacity:0;}
 
   /* Hero */
-  #hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 0 3rem;
-    z-index: 1;
-  }
-  .hero-content { max-width: 800px; }
-  .hero-label {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .hero-label::before {
-    content: '';
-    display: inline-block;
-    width: 30px; height: 1px;
-    background: var(--accent);
-  }
-  .hero-name {
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-  .hero-name .first { color: var(--text); }
-  .hero-name .last {
-    color: transparent;
-    -webkit-text-stroke: 1px var(--accent);
-  }
-  .hero-tagline {
-    font-family: var(--mono);
-    font-size: 1rem;
-    color: var(--muted);
-    margin: 1.5rem 0 2.5rem;
-    min-height: 1.5em;
-  }
-  .hero-tagline .typed-text { color: var(--accent3); }
-  .cursor-blink {
-    display: inline-block;
-    width: 2px; height: 1em;
-    background: var(--accent);
-    animation: blink 1s step-end infinite;
-    vertical-align: middle;
-    margin-left: 2px;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .btn-primary {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.85rem 2rem;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    text-decoration: none;
-    display: inline-block;
-    font-weight: 700;
-    transition: all 0.2s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-  }
-  .btn-primary:hover {
-    background: #fff;
-    transform: translateY(-2px);
-  }
-  .btn-outline {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.85rem 2rem;
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--border);
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.2s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-  }
-  .btn-outline:hover {
-    border-color: var(--accent);
-    background: rgba(0,212,255,0.08);
-  }
-
-  .hero-scroll {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-  }
-  .scroll-line {
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(to bottom, var(--accent), transparent);
-    animation: scrollAnim 2s ease-in-out infinite;
-  }
-  @keyframes scrollAnim {
-    0%, 100% { transform: scaleY(1); opacity: 1; }
-    50% { transform: scaleY(0.5); opacity: 0.3; }
-  }
+  #hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:0 3rem;z-index:1;}
+  .hero-content{max-width:800px;}
+  .hero-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem;}
+  .hero-label::before{content:'';display:inline-block;width:30px;height:1px;background:var(--accent);}
+  .hero-name{font-size:clamp(3rem,8vw,6.5rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .hero-name .first{color:var(--text);}
+  .hero-name .last{color:transparent;-webkit-text-stroke:1px var(--accent);}
+  .hero-tagline{font-family:var(--mono);font-size:1rem;color:var(--muted);margin:1.5rem 0 2.5rem;min-height:1.5em;}
+  .hero-tagline .typed-text{color:var(--accent3);}
+  .cursor-blink{display:inline-block;width:2px;height:1em;background:var(--accent);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+  @keyframes blink{50%{opacity:0;}}
+  .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
+  .btn-primary{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2rem;background:var(--accent);color:var(--bg);border:none;text-decoration:none;display:inline-block;font-weight:700;transition:all .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+  .btn-primary:hover{background:#fff;transform:translateY(-2px);}
+  .btn-outline{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2rem;background:transparent;color:var(--accent);border:1px solid var(--border);text-decoration:none;display:inline-block;transition:all .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+  .btn-outline:hover{border-color:var(--accent);background:rgba(0,212,255,.08);}
+  .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.15em;}
+  .scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollAnim 2s ease-in-out infinite;}
+  @keyframes scrollAnim{0%,100%{transform:scaleY(1);opacity:1;}50%{transform:scaleY(.5);opacity:.3;}}
 
   /* Sections */
-  section {
-    position: relative;
-    z-index: 1;
-    padding: 6rem 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 4rem;
-  }
-  .section-num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    letter-spacing: 0.15em;
-  }
-  .section-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--border), transparent);
-  }
-
-  /* Separator */
-  .section-sep {
-    max-width: none;
-    padding: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--border), transparent);
-    margin: 0;
-  }
+  section{position:relative;z-index:1;padding:6rem 3rem;max-width:1200px;margin:0 auto;}
+  .section-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:4rem;}
+  .section-num{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.15em;}
+  .section-title{font-size:2.5rem;font-weight:700;letter-spacing:-.02em;}
+  .section-line{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .section-sep{max-width:none;padding:0;width:100%;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0;}
 
   /* Vision */
-  .vision-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-  .vision-text {
-    font-size: 1.15rem;
-    line-height: 1.8;
-    color: var(--text);
-  }
-  .vision-text p { margin-bottom: 1.25rem; }
-  .vision-text strong { color: var(--accent); font-weight: 600; }
-  .vision-stats {
-    display: grid;
-    gap: 1rem;
-  }
-  .stat-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px;
-    height: 100%;
-    background: var(--accent);
-  }
-  .stat-card:hover {
-    border-color: rgba(0,212,255,0.4);
-    transform: translateX(4px);
-  }
-  .stat-label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
-  .stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .stat-desc {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-top: 0.25rem;
-  }
+  .vision-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+  .vision-text{font-size:1.1rem;line-height:1.9;color:var(--text);}
+  .vision-text p{margin-bottom:1.25rem;}
+  .vision-text strong{color:var(--accent);font-weight:600;}
+  .vision-stats{display:grid;gap:1rem;}
+  .stat-card{background:var(--bg3);border:1px solid var(--border);padding:1.5rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);}
+  .stat-card:hover{border-color:rgba(0,212,255,.4);transform:translateX(4px);}
+  .stat-label{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;}
+  .stat-value{font-size:1.4rem;font-weight:700;color:var(--accent);}
+  .stat-desc{font-size:.85rem;color:var(--muted);margin-top:.25rem;}
 
   /* Research */
-  .research-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-  }
-  .research-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .research-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0,212,255,0.04), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .research-card:hover {
-    border-color: rgba(0,212,255,0.5);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,255,0.1);
-  }
-  .research-card:hover::after { opacity: 1; }
-  .research-tag {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    padding: 0.3rem 0.75rem;
-    background: rgba(0,212,255,0.1);
-    color: var(--accent);
-    border: 1px solid rgba(0,212,255,0.2);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    display: inline-block;
-    margin-bottom: 1rem;
-  }
-  .research-card h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-  }
-  .research-card p {
-    font-size: 0.9rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 1.25rem;
-  }
-  .research-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent3);
-  }
-  .status-dot {
-    width: 6px; height: 6px;
-    background: var(--accent3);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
+  .research-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+  .research-card{background:var(--bg2);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:all .3s;}
+  .research-card:hover{border-color:rgba(0,212,255,.5);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4);}
+  .research-tag{font-family:var(--mono);font-size:.65rem;padding:.3rem .75rem;background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.2);letter-spacing:.1em;text-transform:uppercase;display:inline-block;margin-bottom:1rem;}
+  .research-card h3{font-size:1.1rem;font-weight:600;margin-bottom:.75rem;line-height:1.4;}
+  .research-card p{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;}
+  .research-status{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.7rem;color:var(--accent3);}
+  .status-dot{width:6px;height:6px;background:var(--accent3);border-radius:50%;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
 
   /* Projects */
-  .projects-list { display: flex; flex-direction: column; gap: 1px; }
-  .project-item {
-    display: grid;
-    grid-template-columns: 60px 1fr auto;
-    align-items: center;
-    gap: 2rem;
-    padding: 1.75rem 1.5rem;
-    background: var(--bg2);
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--border);
-    transition: all 0.3s;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-  }
-  .project-item:hover {
-    background: var(--bg3);
-    border-color: var(--border);
-    border-bottom-color: rgba(0,212,255,0.3);
-    padding-left: 2rem;
-  }
-  .project-num {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-  .project-info h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-  }
-  .project-info p {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-  .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-  .tag {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    letter-spacing: 0.05em;
-  }
-  .tag.accent { border-color: rgba(0,212,255,0.3); color: var(--accent); }
+  .projects-list{display:flex;flex-direction:column;gap:1px;}
+  .project-item{display:grid;grid-template-columns:60px 1fr auto;align-items:center;gap:2rem;padding:1.75rem 1.5rem;background:var(--bg2);border:1px solid transparent;border-bottom:1px solid var(--border);transition:all .3s;}
+  .project-item:hover{background:var(--bg3);border-color:var(--border);border-bottom-color:rgba(0,212,255,.3);padding-left:2rem;}
+  .project-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);}
+  .project-info h3{font-size:1.1rem;font-weight:600;margin-bottom:.3rem;}
+  .project-info p{font-size:.85rem;color:var(--muted);}
+  .project-tags{display:flex;gap:.5rem;flex-wrap:wrap;}
+  .tag{font-family:var(--mono);font-size:.6rem;padding:.2rem .6rem;border:1px solid var(--border);color:var(--muted);letter-spacing:.05em;}
+  .tag.accent{border-color:rgba(0,212,255,.3);color:var(--accent);}
 
   /* News */
-  .news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-  .news-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    padding: 1.75rem;
-    transition: all 0.3s;
-    position: relative;
-  }
-  .news-card:hover {
-    border-color: rgba(0,212,255,0.3);
-    transform: translateY(-2px);
-  }
-  .news-date {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.75rem;
-  }
-  .news-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-    line-height: 1.4;
-  }
-  .news-card p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-  .news-chip {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    padding: 0.25rem 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid;
-    display: inline-block;
-    margin-bottom: 0.75rem;
-  }
-  .chip-research { color: var(--accent); border-color: rgba(0,212,255,0.3); }
-  .chip-award { color: #f59e0b; border-color: rgba(245,158,11,0.3); }
-  .chip-event { color: var(--accent3); border-color: rgba(16,185,129,0.3); }
+  .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+  .news-card{background:var(--bg2);border:1px solid var(--border);padding:1.75rem;transition:all .3s;}
+  .news-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px);}
+  .news-date{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.75rem;}
+  .news-card h3{font-size:1rem;font-weight:600;margin-bottom:.6rem;line-height:1.4;}
+  .news-card p{font-size:.85rem;color:var(--muted);line-height:1.6;}
+  .news-chip{font-family:var(--mono);font-size:.6rem;padding:.25rem .6rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid;display:inline-block;margin-bottom:.75rem;}
+  .chip-research{color:var(--accent);border-color:rgba(0,212,255,.3);}
+  .chip-award{color:#f59e0b;border-color:rgba(245,158,11,.3);}
+  .chip-event{color:var(--accent3);border-color:rgba(16,185,129,.3);}
 
   /* Activities */
-  .activities-timeline { position: relative; padding-left: 2rem; }
-  .activities-timeline::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--accent), transparent);
-  }
-  .activity-item {
-    position: relative;
-    padding: 1.5rem 0 1.5rem 2rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .activity-item:last-child { border-bottom: none; }
-  .activity-dot {
-    position: absolute;
-    left: -5.5px; top: 1.8rem;
-    width: 11px; height: 11px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-    transition: background 0.3s;
-  }
-  .activity-item:hover .activity-dot { background: var(--accent); }
-  .activity-date {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.4rem;
-  }
-  .activity-item h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-  }
-  .activity-item p {
-    font-size: 0.875rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
+  .activities-timeline{position:relative;padding-left:2rem;}
+  .activities-timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),transparent);}
+  .activity-item{position:relative;padding:1.5rem 0 1.5rem 2rem;border-bottom:1px solid var(--border);}
+  .activity-item:last-child{border-bottom:none;}
+  .activity-dot{position:absolute;left:-5.5px;top:1.8rem;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);transition:background .3s;}
+  .activity-item:hover .activity-dot{background:var(--accent);}
+  .activity-date{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.4rem;}
+  .activity-item h3{font-size:1.05rem;font-weight:600;margin-bottom:.3rem;}
+  .activity-item p{font-size:.875rem;color:var(--muted);line-height:1.6;}
 
   /* Awards */
-  .awards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-  }
-  .award-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    padding: 2rem 1.75rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s;
-  }
-  .award-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(to right, transparent, var(--accent), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .award-card:hover {
-    border-color: rgba(0,212,255,0.3);
-    transform: translateY(-4px);
-  }
-  .award-card:hover::before { opacity: 1; }
-  .award-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    display: block;
-  }
-  .award-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-  .award-org {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    margin-bottom: 0.4rem;
-  }
-  .award-year {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-  }
+  .awards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;}
+  .award-card{background:var(--bg2);border:1px solid var(--border);padding:2rem 1.75rem;text-align:center;position:relative;overflow:hidden;transition:all .3s;}
+  .award-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s;}
+  .award-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-4px);}
+  .award-card:hover::before{opacity:1;}
+  .award-icon{font-size:2rem;margin-bottom:1rem;display:block;}
+  .award-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem;}
+  .award-org{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.05em;margin-bottom:.4rem;}
+  .award-year{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
 
   /* Contact */
-  #contact { padding-bottom: 6rem; }
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
-  }
-  .contact-info h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-  .contact-info p {
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 2rem;
-  }
-  .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
-  .contact-link {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.85rem 1.25rem;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-  }
-  .contact-link:hover {
-    border-color: rgba(0,212,255,0.4);
-    color: var(--accent);
-    padding-left: 1.75rem;
-  }
-  .contact-link-icon {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    min-width: 20px;
-  }
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-field label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .form-field input,
-  .form-field textarea {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 0.85rem 1rem;
-    font-family: var(--sans);
-    font-size: 0.9rem;
-    outline: none;
-    resize: vertical;
-    transition: border-color 0.2s;
-  }
-  .form-field input:focus,
-  .form-field textarea:focus {
-    border-color: rgba(0,212,255,0.5);
-  }
-  .form-submit {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.9rem 2rem;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    transition: all 0.2s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    align-self: flex-start;
-  }
-  .form-submit:hover { background: #fff; transform: translateY(-2px); }
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+  .contact-info h3{font-size:1.5rem;font-weight:600;margin-bottom:1rem;}
+  .contact-info p{color:var(--muted);line-height:1.8;margin-bottom:2rem;}
+  .contact-links{display:flex;flex-direction:column;gap:.75rem;}
+  .contact-link{display:flex;align-items:center;gap:1rem;padding:.85rem 1.25rem;background:var(--bg2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:.9rem;transition:all .3s;}
+  .contact-link:hover{border-color:rgba(0,212,255,.4);color:var(--accent);padding-left:1.75rem;}
+  .contact-link-icon{font-family:var(--mono);font-size:.7rem;color:var(--accent);min-width:20px;}
+  .contact-form{display:flex;flex-direction:column;gap:1rem;}
+  .form-field{display:flex;flex-direction:column;gap:.4rem;}
+  .form-field label{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+  .form-field input,.form-field textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:.85rem 1rem;font-family:var(--sans);font-size:.9rem;outline:none;resize:vertical;transition:border-color .2s;}
+  body.lang-ja .form-field input,body.lang-ja .form-field textarea{font-family:var(--jp);}
+  .form-field input:focus,.form-field textarea:focus{border-color:rgba(0,212,255,.5);}
+  .form-submit{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 2rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-weight:700;transition:all .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);align-self:flex-start;}
+  .form-submit:hover{background:#fff;transform:translateY(-2px);}
 
   /* Footer */
-  footer {
-    position: relative;
-    z-index: 1;
-    border-top: 1px solid var(--border);
-    padding: 2rem 3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-  footer a { color: var(--accent); text-decoration: none; }
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;}
+  footer a{color:var(--accent);text-decoration:none;}
 
-  /* Scroll reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
 
   /* Mobile */
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    section { padding: 4rem 1.5rem; }
-    #hero { padding: 0 1.5rem; }
-    .hero-name { font-size: 2.8rem; }
-    .vision-grid, .contact-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  @media(max-width:768px){
+    nav{padding:1rem 1.5rem;}
+    .nav-links{display:none;}
+    section{padding:4rem 1.5rem;}
+    #hero{padding:0 1.5rem;}
+    .hero-name{font-size:2.8rem;}
+    .vision-grid,.contact-grid{grid-template-columns:1fr;}
+    footer{flex-direction:column;gap:.5rem;text-align:center;}
+    .project-item{grid-template-columns:40px 1fr;}
+    .project-tags{display:none;}
   }
-
-  /* Hamburger for mobile */
-  .nav-toggle {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-  }
-  .nav-toggle span {
-    display: block;
-    width: 22px;
-    height: 1px;
-    background: var(--accent);
-  }
-  @media (max-width: 768px) {
-    .nav-toggle { display: flex; }
-  }
-
-  /* Glitch effect on name hover */
-  .hero-name:hover .last {
-    animation: glitch 0.4s steps(2) forwards;
-  }
-  @keyframes glitch {
-    0% { text-shadow: 2px 0 var(--accent2), -2px 0 var(--accent3); }
-    25% { text-shadow: -2px 0 var(--accent2), 2px 0 var(--accent3); }
-    50% { text-shadow: 2px 2px var(--accent2), -2px -2px var(--accent3); }
-    75% { text-shadow: -2px -2px var(--accent2), 2px 2px var(--accent3); }
-    100% { text-shadow: none; }
-  }
-
-  /* Active nav */
-  .nav-links a.active { color: var(--accent); }
-  .nav-links a.active::after { width: 100%; }
+  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .nav-toggle span{display:block;width:22px;height:1px;background:var(--accent);}
+  @media(max-width:768px){.nav-toggle{display:flex;}}
+  .hero-name:hover .last{animation:glitch .4s steps(2) forwards;}
+  @keyframes glitch{0%{text-shadow:2px 0 var(--accent2),-2px 0 var(--accent3);}25%{text-shadow:-2px 0 var(--accent2),2px 0 var(--accent3);}50%{text-shadow:2px 2px var(--accent2),-2px -2px var(--accent3);}75%{text-shadow:-2px -2px var(--accent2),2px 2px var(--accent3);}100%{text-shadow:none;}}
 </style>
 </head>
 <body>
 
-<!-- Cursor -->
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
-
-<!-- Stars -->
 <canvas id="stars-canvas"></canvas>
 
-<!-- Nav -->
+<!-- NAV -->
 <nav>
   <a href="#hero" class="nav-logo">TH<span>.init()</span></a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="#vision">Vision</a></li>
-    <li><a href="#research">Research</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#news">News</a></li>
-    <li><a href="#activities">Activities</a></li>
-    <li><a href="#awards">Awards</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#vision"     data-en="Vision"      data-ja="ビジョン">Vision</a></li>
+    <li><a href="#research"   data-en="Research"    data-ja="研究">Research</a></li>
+    <li><a href="#projects"   data-en="Projects"    data-ja="プロジェクト">Projects</a></li>
+    <li><a href="#news"       data-en="News"        data-ja="ニュース">News</a></li>
+    <li><a href="#activities" data-en="Activities"  data-ja="活動">Activities</a></li>
+    <li><a href="#awards"     data-en="Awards"      data-ja="受賞">Awards</a></li>
+    <li><a href="#contact"    data-en="Contact"     data-ja="連絡">Contact</a></li>
   </ul>
-  <div class="nav-toggle" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"        id="btn-ja" onclick="setLang('ja')">日本語</button>
+    </div>
+    <div class="nav-toggle" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
-<!-- Hero -->
+<!-- HERO -->
 <section id="hero">
   <div class="hero-content">
-    <div class="hero-label">Researcher · Entrepreneur · Changemaker</div>
+    <div class="hero-label t-fade" data-en="Researcher · Entrepreneur · Changemaker" data-ja="研究者 · 起業家 · 社会変革者">Researcher · Entrepreneur · Changemaker</div>
     <div class="hero-name">
-      <div class="first">Tomoharu</div>
-      <div class="last">Hayakawa</div>
+      <div class="first t-fade" data-en="Tomoharu" data-ja="早川">Tomoharu</div>
+      <div class="last  t-fade" data-en="Hayakawa" data-ja="友治">Hayakawa</div>
     </div>
-    <p class="hero-tagline">
-      <span class="typed-text" id="typed"></span><span class="cursor-blink"></span>
-    </p>
+    <p class="hero-tagline"><span class="typed-text" id="typed"></span><span class="cursor-blink"></span></p>
     <div class="hero-cta">
-      <a href="#research" class="btn-primary">View Research</a>
-      <a href="#contact" class="btn-outline">Get in Touch</a>
+      <a href="#research" class="btn-primary t-fade" data-en="View Research"  data-ja="研究を見る">View Research</a>
+      <a href="#contact"  class="btn-outline  t-fade" data-en="Get in Touch"   data-ja="お問合せ">Get in Touch</a>
     </div>
   </div>
   <div class="hero-scroll">
-    <span>SCROLL</span>
+    <span class="t-fade" data-en="SCROLL" data-ja="スクロール">SCROLL</span>
     <div class="scroll-line"></div>
   </div>
 </section>
 
 <div class="section-sep"></div>
 
-<!-- Vision -->
+<!-- VISION -->
 <section id="vision">
   <div class="section-header reveal">
     <span class="section-num">01</span>
-    <h2 class="section-title">Vision</h2>
+    <h2 class="section-title t-fade" data-en="Vision" data-ja="ビジョン">Vision</h2>
     <div class="section-line"></div>
   </div>
   <div class="vision-grid">
-    <div class="vision-text reveal">
+    <div class="vision-text reveal t-fade"
+      data-en="<p>I'm a high schooler on a mission: to push the boundaries of research and transform discoveries into <strong>real-world impact</strong> for communities around me.</p><p>My journey begins at the intersection of <strong>curiosity and action</strong> — exploring scientific questions that matter, then building ventures that carry those answers from the lab into everyday life.</p><p>I believe the next generation of entrepreneurs won't just build companies. They'll be <strong>researcher-founders</strong> who see problems others miss and have the tools to solve them from first principles.</p><p>My goal is simple: conduct meaningful research, then <strong>give it back</strong> — to my community, to society, and to the world.</p>"
+      data-ja="<p>私は使命を持った高校生です。研究の限界を押し広げ、発見を<strong>実社会のインパクト</strong>へと変えることを目指しています。</p><p>私の旅は<strong>好奇心と行動</strong>の交差点から始まります。重要な科学的疑問を探求し、その答えを研究室から日常生活へ運ぶ事業を構築することです。</p><p>次世代の起業家はただ会社を作るだけではないと信じています。他者が見逃す問題を発見し、第一原理からそれを解決できる<strong>研究者起業家</strong>になるでしょう。</p><p>私の目標はシンプルです。意義ある研究を行い、その成果を<strong>コミュニティ、社会、そして世界に還元する</strong>ことです。</p>">
       <p>I'm a high schooler on a mission: to push the boundaries of research and transform discoveries into <strong>real-world impact</strong> for communities around me.</p>
       <p>My journey begins at the intersection of <strong>curiosity and action</strong> — exploring scientific questions that matter, then building ventures that carry those answers from the lab into everyday life.</p>
       <p>I believe the next generation of entrepreneurs won't just build companies. They'll be <strong>researcher-founders</strong> who see problems others miss and have the tools to solve them from first principles.</p>
@@ -829,19 +262,19 @@
     </div>
     <div class="vision-stats reveal">
       <div class="stat-card">
-        <div class="stat-label">Current Status</div>
-        <div class="stat-value">High School</div>
-        <div class="stat-desc">Active researcher & aspiring entrepreneur</div>
+        <div class="stat-label t-fade" data-en="Current Status"   data-ja="現在の状況">Current Status</div>
+        <div class="stat-value t-fade" data-en="High School"      data-ja="高校生">High School</div>
+        <div class="stat-desc  t-fade" data-en="Active researcher & aspiring entrepreneur" data-ja="現役研究者・将来の起業家">Active researcher & aspiring entrepreneur</div>
       </div>
-      <div class="stat-card" style="--accent: #10b981;">
-        <div class="stat-label">Focus Area</div>
-        <div class="stat-value" style="color: #10b981;">Research → Impact</div>
-        <div class="stat-desc">Turning findings into community solutions</div>
+      <div class="stat-card" style="--accent:#10b981">
+        <div class="stat-label t-fade" data-en="Focus Area"       data-ja="注力分野">Focus Area</div>
+        <div class="stat-value t-fade" style="color:#10b981" data-en="Research → Impact" data-ja="研究 → 社会貢献">Research → Impact</div>
+        <div class="stat-desc  t-fade" data-en="Turning findings into community solutions" data-ja="発見をコミュニティの解決策へ">Turning findings into community solutions</div>
       </div>
-      <div class="stat-card" style="--accent: #7c3aed;">
-        <div class="stat-label">Ambition</div>
-        <div class="stat-value" style="color: #7c3aed;">Founder-Researcher</div>
-        <div class="stat-desc">Bridging science and entrepreneurship</div>
+      <div class="stat-card" style="--accent:#a78bfa">
+        <div class="stat-label t-fade" data-en="Ambition"         data-ja="目標">Ambition</div>
+        <div class="stat-value t-fade" style="color:#a78bfa" data-en="Founder-Researcher" data-ja="創業者兼研究者">Founder-Researcher</div>
+        <div class="stat-desc  t-fade" data-en="Bridging science and entrepreneurship" data-ja="科学と起業家精神の架け橋">Bridging science and entrepreneurship</div>
       </div>
     </div>
   </div>
@@ -849,201 +282,180 @@
 
 <div class="section-sep"></div>
 
-<!-- Research -->
+<!-- RESEARCH -->
 <section id="research">
   <div class="section-header reveal">
     <span class="section-num">02</span>
-    <h2 class="section-title">Research</h2>
+    <h2 class="section-title t-fade" data-en="Research" data-ja="研究">Research</h2>
     <div class="section-line"></div>
   </div>
   <div class="research-grid">
     <div class="research-card reveal">
-      <span class="research-tag">Ongoing</span>
-      <h3>Primary Research Project</h3>
-      <p>Update this with your actual research topic. Describe the problem you're solving, your methodology, and what you hope to discover.</p>
-      <div class="research-status">
-        <div class="status-dot"></div>
-        Active — In Progress
-      </div>
+      <span class="research-tag t-fade" data-en="Ongoing" data-ja="進行中">Ongoing</span>
+      <h3 class="t-fade" data-en="Primary Research Project" data-ja="主要研究プロジェクト">Primary Research Project</h3>
+      <p class="t-fade" data-en="Update this with your actual research topic. Describe the problem you're solving, your methodology, and what you hope to discover." data-ja="実際の研究テーマに更新してください。解決しようとしている問題、方法論、発見したいことを説明してください。">Update this with your actual research topic. Describe the problem you're solving, your methodology, and what you hope to discover.</p>
+      <div class="research-status"><div class="status-dot"></div><span class="t-fade" data-en="Active — In Progress" data-ja="進行中">Active — In Progress</span></div>
     </div>
     <div class="research-card reveal">
-      <span class="research-tag" style="background:rgba(124,58,237,0.1);color:#a78bfa;border-color:rgba(124,58,237,0.2);">Exploring</span>
-      <h3>Secondary Research Interest</h3>
-      <p>Add your second area of research interest here. What questions fascinate you? What gaps in knowledge are you trying to fill?</p>
-      <div class="research-status" style="color:#a78bfa;">
-        <div class="status-dot" style="background:#a78bfa;"></div>
-        Exploring possibilities
-      </div>
+      <span class="research-tag t-fade" style="background:rgba(124,58,237,.1);color:#a78bfa;border-color:rgba(124,58,237,.2);" data-en="Exploring" data-ja="探索中">Exploring</span>
+      <h3 class="t-fade" data-en="Secondary Research Interest" data-ja="第二の研究関心">Secondary Research Interest</h3>
+      <p class="t-fade" data-en="Add your second area of research interest here. What questions fascinate you? What gaps in knowledge are you trying to fill?" data-ja="第二の研究関心分野をここに追加してください。どんな疑問に魅了されていますか？どの知識の空白を埋めようとしていますか？">Add your second area of research interest here. What questions fascinate you? What gaps in knowledge are you trying to fill?</p>
+      <div class="research-status" style="color:#a78bfa;"><div class="status-dot" style="background:#a78bfa;"></div><span class="t-fade" data-en="Exploring possibilities" data-ja="可能性を探索中">Exploring possibilities</span></div>
     </div>
     <div class="research-card reveal">
-      <span class="research-tag" style="background:rgba(16,185,129,0.1);color:#10b981;border-color:rgba(16,185,129,0.2);">Complete</span>
-      <h3>Past Research Work</h3>
-      <p>Describe any completed research, science fair projects, or independent studies you've done. What did you find?</p>
-      <div class="research-status" style="color:#10b981;">
-        <div class="status-dot" style="background:#10b981;animation:none;opacity:0.6;"></div>
-        Completed
-      </div>
+      <span class="research-tag t-fade" style="background:rgba(16,185,129,.1);color:#10b981;border-color:rgba(16,185,129,.2);" data-en="Complete" data-ja="完了">Complete</span>
+      <h3 class="t-fade" data-en="Past Research Work" data-ja="過去の研究">Past Research Work</h3>
+      <p class="t-fade" data-en="Describe any completed research, science fair projects, or independent studies you've done. What did you find?" data-ja="完了した研究、科学フェアプロジェクト、または独立した研究について説明してください。何を発見しましたか？">Describe any completed research, science fair projects, or independent studies you've done. What did you find?</p>
+      <div class="research-status" style="color:#10b981;"><div class="status-dot" style="background:#10b981;animation:none;opacity:.6;"></div><span class="t-fade" data-en="Completed" data-ja="完了">Completed</span></div>
     </div>
   </div>
 </section>
 
 <div class="section-sep"></div>
 
-<!-- Projects -->
+<!-- PROJECTS -->
 <section id="projects">
   <div class="section-header reveal">
     <span class="section-num">03</span>
-    <h2 class="section-title">Projects</h2>
+    <h2 class="section-title t-fade" data-en="Projects" data-ja="プロジェクト">Projects</h2>
     <div class="section-line"></div>
   </div>
   <div class="projects-list reveal">
     <div class="project-item">
       <div class="project-num">001</div>
       <div class="project-info">
-        <h3>Project Alpha</h3>
-        <p>Brief description of your project — what it does and why it matters.</p>
+        <h3 class="t-fade" data-en="Project Alpha"        data-ja="プロジェクト アルファ">Project Alpha</h3>
+        <p  class="t-fade" data-en="Brief description of your project — what it does and why it matters." data-ja="プロジェクトの概要 — 何をするものか、なぜ重要なのか。">Brief description of your project — what it does and why it matters.</p>
       </div>
-      <div class="project-tags">
-        <span class="tag accent">Research</span>
-        <span class="tag">2024</span>
-      </div>
+      <div class="project-tags"><span class="tag accent">Research</span><span class="tag">2024</span></div>
     </div>
     <div class="project-item">
       <div class="project-num">002</div>
       <div class="project-info">
-        <h3>Community Initiative</h3>
-        <p>Describe a project or initiative you launched to give back to your community.</p>
+        <h3 class="t-fade" data-en="Community Initiative" data-ja="コミュニティ活動">Community Initiative</h3>
+        <p  class="t-fade" data-en="Describe a project or initiative you launched to give back to your community." data-ja="コミュニティに還元するために立ち上げたプロジェクトや取り組み。">Describe a project or initiative you launched to give back to your community.</p>
       </div>
-      <div class="project-tags">
-        <span class="tag accent">Impact</span>
-        <span class="tag">2024</span>
-      </div>
+      <div class="project-tags"><span class="tag accent">Impact</span><span class="tag">2024</span></div>
     </div>
     <div class="project-item">
       <div class="project-num">003</div>
       <div class="project-info">
-        <h3>Entrepreneurship Venture</h3>
-        <p>Any startup idea, small business, or entrepreneurial project you've undertaken.</p>
+        <h3 class="t-fade" data-en="Entrepreneurship Venture" data-ja="起業家的取り組み">Entrepreneurship Venture</h3>
+        <p  class="t-fade" data-en="Any startup idea, small business, or entrepreneurial project you've undertaken." data-ja="取り組んだスタートアップのアイデア、小規模ビジネス、起業家プロジェクト。">Any startup idea, small business, or entrepreneurial project you've undertaken.</p>
       </div>
-      <div class="project-tags">
-        <span class="tag accent">Startup</span>
-        <span class="tag">2025</span>
-      </div>
+      <div class="project-tags"><span class="tag accent">Startup</span><span class="tag">2025</span></div>
     </div>
     <div class="project-item">
       <div class="project-num">004</div>
       <div class="project-info">
-        <h3>Collaborative Project</h3>
-        <p>A team project, school collaboration, or group research effort.</p>
+        <h3 class="t-fade" data-en="Collaborative Project" data-ja="共同プロジェクト">Collaborative Project</h3>
+        <p  class="t-fade" data-en="A team project, school collaboration, or group research effort." data-ja="チームプロジェクト、学校での共同作業、またはグループ研究活動。">A team project, school collaboration, or group research effort.</p>
       </div>
-      <div class="project-tags">
-        <span class="tag">Collab</span>
-        <span class="tag">2025</span>
-      </div>
+      <div class="project-tags"><span class="tag">Collab</span><span class="tag">2025</span></div>
     </div>
   </div>
 </section>
 
 <div class="section-sep"></div>
 
-<!-- News -->
+<!-- NEWS -->
 <section id="news">
   <div class="section-header reveal">
     <span class="section-num">04</span>
-    <h2 class="section-title">News</h2>
+    <h2 class="section-title t-fade" data-en="News" data-ja="ニュース">News</h2>
     <div class="section-line"></div>
   </div>
   <div class="news-grid">
     <div class="news-card reveal">
-      <span class="news-chip chip-research">Research</span>
+      <span class="news-chip chip-research t-fade" data-en="Research" data-ja="研究">Research</span>
       <div class="news-date">APR 2026</div>
-      <h3>New Research Phase Begins</h3>
-      <p>Update this with your latest news — a new project launch, publication, or breakthrough moment.</p>
+      <h3 class="t-fade" data-en="New Research Phase Begins"     data-ja="新しい研究フェーズ開始">New Research Phase Begins</h3>
+      <p  class="t-fade" data-en="Update this with your latest news — a new project launch, publication, or breakthrough moment." data-ja="最新ニュースに更新してください — 新プロジェクト開始、論文発表、ブレークスルーなど。">Update this with your latest news — a new project launch, publication, or breakthrough moment.</p>
     </div>
     <div class="news-card reveal">
-      <span class="news-chip chip-award">Achievement</span>
+      <span class="news-chip chip-award t-fade" data-en="Achievement" data-ja="実績">Achievement</span>
       <div class="news-date">MAR 2026</div>
-      <h3>Recognition or Award Received</h3>
-      <p>Share any recent recognition, competition wins, or academic achievements you're proud of.</p>
+      <h3 class="t-fade" data-en="Recognition or Award Received" data-ja="表彰・受賞">Recognition or Award Received</h3>
+      <p  class="t-fade" data-en="Share any recent recognition, competition wins, or academic achievements you're proud of." data-ja="誇りに思う最近の表彰、コンペ優勝、または学術的実績をシェアしてください。">Share any recent recognition, competition wins, or academic achievements you're proud of.</p>
     </div>
     <div class="news-card reveal">
-      <span class="news-chip chip-event">Event</span>
+      <span class="news-chip chip-event t-fade" data-en="Event" data-ja="イベント">Event</span>
       <div class="news-date">FEB 2026</div>
-      <h3>Conference / Presentation</h3>
-      <p>Did you present at an event, join a summit, or participate in a program? Share it here.</p>
+      <h3 class="t-fade" data-en="Conference / Presentation"     data-ja="学会・発表">Conference / Presentation</h3>
+      <p  class="t-fade" data-en="Did you present at an event, join a summit, or participate in a program? Share it here." data-ja="イベントで発表したり、サミットに参加したりしましたか？ここでシェアしてください。">Did you present at an event, join a summit, or participate in a program? Share it here.</p>
     </div>
   </div>
 </section>
 
 <div class="section-sep"></div>
 
-<!-- Activities -->
+<!-- ACTIVITIES -->
 <section id="activities">
   <div class="section-header reveal">
     <span class="section-num">05</span>
-    <h2 class="section-title">Activities</h2>
+    <h2 class="section-title t-fade" data-en="Activities" data-ja="活動">Activities</h2>
     <div class="section-line"></div>
   </div>
   <div class="activities-timeline reveal">
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date">2025 – PRESENT</div>
-      <h3>Research Club / Science Society</h3>
-      <p>Describe your role and contributions in any school clubs, societies, or research groups.</p>
+      <div class="activity-date t-fade" data-en="2025 – PRESENT" data-ja="2025年 – 現在">2025 – PRESENT</div>
+      <h3 class="t-fade" data-en="Research Club / Science Society"      data-ja="研究クラブ・科学部">Research Club / Science Society</h3>
+      <p  class="t-fade" data-en="Describe your role and contributions in any school clubs, societies, or research groups." data-ja="学校のクラブ、学会、または研究グループでの役割と貢献を説明してください。">Describe your role and contributions in any school clubs, societies, or research groups.</p>
     </div>
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date">2024 – PRESENT</div>
-      <h3>Entrepreneurship / Business Program</h3>
-      <p>Any startup programs, business competitions, or entrepreneurship courses you've joined.</p>
+      <div class="activity-date t-fade" data-en="2024 – PRESENT" data-ja="2024年 – 現在">2024 – PRESENT</div>
+      <h3 class="t-fade" data-en="Entrepreneurship / Business Program" data-ja="起業家・ビジネスプログラム">Entrepreneurship / Business Program</h3>
+      <p  class="t-fade" data-en="Any startup programs, business competitions, or entrepreneurship courses you've joined." data-ja="参加したスタートアッププログラム、ビジネスコンペ、または起業家コース。">Any startup programs, business competitions, or entrepreneurship courses you've joined.</p>
     </div>
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date">2024</div>
-      <h3>Volunteer / Community Service</h3>
-      <p>How do you give back to your community? Describe your volunteer work and service projects.</p>
+      <div class="activity-date t-fade" data-en="2024" data-ja="2024年">2024</div>
+      <h3 class="t-fade" data-en="Volunteer / Community Service"        data-ja="ボランティア・地域奉仕">Volunteer / Community Service</h3>
+      <p  class="t-fade" data-en="How do you give back to your community? Describe your volunteer work and service projects." data-ja="コミュニティにどう貢献していますか？ボランティア活動や奉仕プロジェクトを説明してください。">How do you give back to your community? Describe your volunteer work and service projects.</p>
     </div>
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date">2023 – PRESENT</div>
-      <h3>Other Extracurriculars</h3>
-      <p>Sports, arts, music, debate — anything else that defines who you are beyond academics.</p>
+      <div class="activity-date t-fade" data-en="2023 – PRESENT" data-ja="2023年 – 現在">2023 – PRESENT</div>
+      <h3 class="t-fade" data-en="Other Extracurriculars"               data-ja="その他の課外活動">Other Extracurriculars</h3>
+      <p  class="t-fade" data-en="Sports, arts, music, debate — anything else that defines who you are beyond academics." data-ja="スポーツ、芸術、音楽、ディベート — 学業以外のあなたを定義するもの。">Sports, arts, music, debate — anything else that defines who you are beyond academics.</p>
     </div>
   </div>
 </section>
 
 <div class="section-sep"></div>
 
-<!-- Awards -->
+<!-- AWARDS -->
 <section id="awards">
   <div class="section-header reveal">
     <span class="section-num">06</span>
-    <h2 class="section-title">Awards</h2>
+    <h2 class="section-title t-fade" data-en="Awards" data-ja="受賞歴">Awards</h2>
     <div class="section-line"></div>
   </div>
   <div class="awards-grid">
     <div class="award-card reveal">
       <span class="award-icon">🏆</span>
-      <h3>Award Name Here</h3>
-      <div class="award-org">Awarding Organization</div>
+      <h3 class="award-org t-fade" data-en="Award Name Here"       data-ja="受賞名">Award Name Here</h3>
+      <div class="award-org t-fade" data-en="Awarding Organization" data-ja="授与機関">Awarding Organization</div>
       <div class="award-year">2025</div>
     </div>
     <div class="award-card reveal">
       <span class="award-icon">🥇</span>
-      <h3>Competition Winner</h3>
-      <div class="award-org">Competition Name</div>
+      <h3 class="t-fade" data-en="Competition Winner"  data-ja="コンペ優勝">Competition Winner</h3>
+      <div class="award-org t-fade" data-en="Competition Name" data-ja="大会名">Competition Name</div>
       <div class="award-year">2024</div>
     </div>
     <div class="award-card reveal">
       <span class="award-icon">📜</span>
-      <h3>Scholarship / Grant</h3>
-      <div class="award-org">Granting Institution</div>
+      <h3 class="t-fade" data-en="Scholarship / Grant" data-ja="奨学金・助成金">Scholarship / Grant</h3>
+      <div class="award-org t-fade" data-en="Granting Institution" data-ja="授与機関">Granting Institution</div>
       <div class="award-year">2024</div>
     </div>
     <div class="award-card reveal">
       <span class="award-icon">⭐</span>
-      <h3>Academic Excellence</h3>
-      <div class="award-org">Your School</div>
+      <h3 class="t-fade" data-en="Academic Excellence" data-ja="学業優秀賞">Academic Excellence</h3>
+      <div class="award-org t-fade" data-en="Your School"         data-ja="学校名">Your School</div>
       <div class="award-year">2023</div>
     </div>
   </div>
@@ -1051,179 +463,141 @@
 
 <div class="section-sep"></div>
 
-<!-- Contact -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="section-header reveal">
     <span class="section-num">07</span>
-    <h2 class="section-title">Contact</h2>
+    <h2 class="section-title t-fade" data-en="Contact" data-ja="お問合せ">Contact</h2>
     <div class="section-line"></div>
   </div>
   <div class="contact-grid">
     <div class="contact-info reveal">
-      <h3>Let's connect.</h3>
-      <p>Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you.</p>
+      <h3 class="t-fade" data-en="Let's connect." data-ja="繋がりましょう。">Let's connect.</h3>
+      <p class="t-fade"
+        data-en="Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you."
+        data-ja="研究仲間、潜在的な協力者、メンター、または私の研究に興味がある方 — ぜひご連絡ください。">
+        Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you.
+      </p>
       <div class="contact-links">
-        <a href="mailto:your@email.com" class="contact-link">
-          <span class="contact-link-icon">✉</span>
-          your@email.com
-        </a>
-        <a href="https://github.com/yourusername" class="contact-link" target="_blank">
-          <span class="contact-link-icon">&#9670;</span>
-          github.com/yourusername
-        </a>
-        <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank">
-          <span class="contact-link-icon">&#9670;</span>
-          LinkedIn Profile
-        </a>
-        <a href="https://twitter.com/yourhandle" class="contact-link" target="_blank">
-          <span class="contact-link-icon">&#9670;</span>
-          @yourhandle
-        </a>
+        <a href="mailto:your@email.com" class="contact-link"><span class="contact-link-icon">✉</span>your@email.com</a>
+        <a href="https://github.com/yourusername" class="contact-link" target="_blank"><span class="contact-link-icon">◆</span>github.com/yourusername</a>
+        <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank"><span class="contact-link-icon">◆</span>LinkedIn Profile</a>
+        <a href="https://twitter.com/yourhandle" class="contact-link" target="_blank"><span class="contact-link-icon">◆</span>@yourhandle</a>
       </div>
     </div>
     <form class="contact-form reveal" onsubmit="handleSubmit(event)">
       <div class="form-field">
-        <label>Name</label>
-        <input type="text" placeholder="Your name" required>
+        <label class="t-fade" data-en="Name"    data-ja="お名前">Name</label>
+        <input type="text"  id="inp-name"  placeholder="Your name" required>
       </div>
       <div class="form-field">
-        <label>Email</label>
-        <input type="email" placeholder="your@email.com" required>
+        <label class="t-fade" data-en="Email"   data-ja="メールアドレス">Email</label>
+        <input type="email" id="inp-email" placeholder="your@email.com" required>
       </div>
       <div class="form-field">
-        <label>Message</label>
-        <textarea rows="5" placeholder="Tell me about yourself or your idea..." required></textarea>
+        <label class="t-fade" data-en="Message" data-ja="メッセージ">Message</label>
+        <textarea rows="5"  id="inp-msg"   placeholder="Tell me about yourself or your idea..." required></textarea>
       </div>
-      <button type="submit" class="form-submit">Send Message →</button>
-      <p id="form-msg" style="font-family:var(--mono);font-size:0.7rem;color:var(--accent3);display:none;">
+      <button type="submit" class="form-submit t-fade" data-en="Send Message →" data-ja="送信する →">Send Message →</button>
+      <p id="form-success" style="font-family:var(--mono);font-size:.7rem;color:var(--accent3);display:none;" class="t-fade"
+        data-en="✓ Message sent! I'll get back to you soon."
+        data-ja="✓ 送信完了！近日中にご返信いたします。">
         ✓ Message sent! I'll get back to you soon.
       </p>
     </form>
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
-  <span>© 2026 Tomoharu Hayakawa</span>
-  <span>Built with purpose. <a href="#hero">↑ Back to top</a></span>
+  <span>© 2026 早川友治 · Tomoharu Hayakawa</span>
+  <span id="footer-back" class="t-fade" data-en="Built with purpose. <a href='#hero'>↑ Back to top</a>" data-ja="目的を持って構築。<a href='#hero'>↑ トップへ</a>">Built with purpose. <a href="#hero">↑ Back to top</a></span>
 </footer>
 
 <script>
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
-function animateRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx+'px'; ring.style.top = ry+'px';
-  requestAnimationFrame(animateRing);
+// ── LANGUAGE ──
+let currentLang = 'en';
+const phrases = {
+  en: ['High school researcher.','Aspiring entrepreneur.','Building the future.','Research → Community impact.','Curiosity-driven. Action-focused.'],
+  ja: ['高校生研究者。','将来の起業家。','未来を構築中。','研究 → 地域社会への貢献。','好奇心主導。行動重視。']
+};
+const placeholders = {
+  en: {name:'Your name', email:'your@email.com', msg:'Tell me about yourself or your idea...'},
+  ja: {name:'お名前',    email:'your@email.com', msg:'あなたや、あなたのアイデアについて教えてください...'}
+};
+
+function setLang(lang) {
+  if (lang === currentLang) return;
+  currentLang = lang;
+  document.body.classList.add('switching');
+  setTimeout(() => {
+    document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      // Use innerHTML for elements that may contain HTML tags
+      if (el.classList.contains('vision-text') || el.id === 'footer-back') {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+    const p = placeholders[lang];
+    document.getElementById('inp-name').placeholder  = p.name;
+    document.getElementById('inp-email').placeholder = p.email;
+    document.getElementById('inp-msg').placeholder   = p.msg;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+    document.body.classList.toggle('lang-ja', lang === 'ja');
+    document.documentElement.lang = lang;
+    // Restart typing
+    pIdx = 0; cIdx = 0; deleting = false;
+    clearTimeout(typeTimer);
+    typedEl.textContent = '';
+    type();
+    document.body.classList.remove('switching');
+  }, 280);
 }
-animateRing();
-document.querySelectorAll('a, button, .research-card, .project-item, .award-card').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='50px'; ring.style.height='50px'; });
-  el.addEventListener('mouseleave', () => { cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
+
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('a,button,.research-card,.project-item,.award-card,.news-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='50px'; ring.style.height='50px'; });
+  el.addEventListener('mouseleave',()=>{ cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
 });
 
-// Stars
-const canvas = document.getElementById('stars-canvas');
-const ctx = canvas.getContext('2d');
-let stars = [];
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-function initStars() {
-  stars = [];
-  for (let i = 0; i < 200; i++) {
-    stars.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 1.5,
-      speed: Math.random() * 0.3 + 0.05,
-      opacity: Math.random()
-    });
-  }
-}
-function drawStars() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  stars.forEach(s => {
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(180, 220, 255, ${s.opacity})`;
-    ctx.fill();
-    s.y += s.speed;
-    s.opacity = 0.3 + Math.abs(Math.sin(Date.now() * 0.001 + s.x)) * 0.7;
-    if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
-  });
-  requestAnimationFrame(drawStars);
-}
-resizeCanvas(); initStars(); drawStars();
-window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+// ── STARS ──
+const canvas=document.getElementById('stars-canvas'), ctx=canvas.getContext('2d'); let stars=[];
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+function initStars(){ stars=[]; for(let i=0;i<200;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.5,speed:Math.random()*.3+.05,op:Math.random()}); }
+(function drawStars(){ ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s=>{ ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(180,220,255,${s.op})`; ctx.fill(); s.y+=s.speed; s.op=.3+Math.abs(Math.sin(Date.now()*.001+s.x))*.7; if(s.y>canvas.height){s.y=0;s.x=Math.random()*canvas.width;} }); requestAnimationFrame(drawStars); })();
+resizeCanvas(); initStars(); window.addEventListener('resize',()=>{ resizeCanvas(); initStars(); });
 
-// Typed effect
-const phrases = [
-  'High school researcher.',
-  'Aspiring entrepreneur.',
-  'Building the future.',
-  'Research → Community impact.',
-  'Curiosity-driven. Action-focused.'
-];
-let pIdx = 0, cIdx = 0, deleting = false;
-const typedEl = document.getElementById('typed');
-function type() {
-  const phrase = phrases[pIdx];
-  if (!deleting) {
-    typedEl.textContent = phrase.substring(0, cIdx + 1);
-    cIdx++;
-    if (cIdx === phrase.length) { setTimeout(() => deleting = true, 2000); setTimeout(type, 100); return; }
-  } else {
-    typedEl.textContent = phrase.substring(0, cIdx - 1);
-    cIdx--;
-    if (cIdx === 0) { deleting = false; pIdx = (pIdx + 1) % phrases.length; }
-  }
-  setTimeout(type, deleting ? 50 : 90);
+// ── TYPING ──
+let pIdx=0, cIdx=0, deleting=false, typeTimer;
+const typedEl=document.getElementById('typed');
+function type(){
+  const list=phrases[currentLang], phrase=list[pIdx%list.length];
+  if(!deleting){ typedEl.textContent=phrase.substring(0,++cIdx); if(cIdx===phrase.length){ setTimeout(()=>deleting=true,2000); typeTimer=setTimeout(type,100); return; } }
+  else { typedEl.textContent=phrase.substring(0,--cIdx); if(cIdx===0){ deleting=false; pIdx=(pIdx+1)%list.length; } }
+  typeTimer=setTimeout(type,deleting?50:90);
 }
 type();
 
-// Scroll reveal
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), 100);
-    }
-  });
-}, { threshold: 0.1 });
-reveals.forEach(el => observer.observe(el));
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),100); }),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// Active nav
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
-  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
-});
+// ── ACTIVE NAV ──
+const secs=document.querySelectorAll('section[id]'), nls=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{ let cur=''; secs.forEach(s=>{ if(window.scrollY>=s.offsetTop-200) cur=s.id; }); nls.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur)); });
 
-// Mobile menu
-function toggleMenu() {
-  const nl = document.getElementById('nav-links');
-  if (nl.style.display === 'flex') {
-    nl.style.display = '';
-  } else {
-    nl.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(2,4,8,0.97);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border);';
-  }
-}
+// ── MOBILE MENU ──
+function toggleMenu(){ const nl=document.getElementById('nav-links'); if(nl.style.display==='flex'){ nl.style.display=''; } else { nl.style.cssText='display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:rgba(2,4,8,.97);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border);z-index:999;'; } }
 
-// Form
-function handleSubmit(e) {
-  e.preventDefault();
-  document.getElementById('form-msg').style.display = 'block';
-  e.target.reset();
-  setTimeout(() => document.getElementById('form-msg').style.display = 'none', 5000);
-}
+// ── FORM ──
+function handleSubmit(e){ e.preventDefault(); const msg=document.getElementById('form-success'); msg.style.display='block'; e.target.reset(); setTimeout(()=>msg.style.display='none',5000); }
 </script>
 </body>
 </html>
