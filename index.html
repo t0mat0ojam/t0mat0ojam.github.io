@@ -280,11 +280,11 @@
         <div class="photo-label t-fade" data-ja="フォト" data-en="Photo">フォト</div>
       </div>
       <div class="photo-slot has-image">
-        <img src="IMG_0655 2.HEIC" alt="Photo">
+        <img src="IMG_0655 2.png" alt="Photo">
         <div class="photo-label t-fade" data-ja="フォト" data-en="Photo">フォト</div>
       </div>
       <div class="photo-slot has-image">
-        <img src="IMG_2401.HEIC" alt="Photo">
+        <img src="IMG_2401.png" alt="Photo">
         <div class="photo-label t-fade" data-ja="フォト" data-en="Photo">フォト</div>
       </div>
     </div>
@@ -517,7 +517,7 @@
   <div class="contact-grid">
     <div class="contact-info reveal">
       <div class="contact-links">
-        <a href="mailto:tomohayakawa25@gmail.com" class="contact-link"><span class="contact-link-icon">✉</span>tomohayakawa25@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#8df9e2e0e2e5ecf4ece6ecfaecbfb8cdeae0ece4e1a3eee2e0" class="contact-link"><span class="contact-link-icon">✉</span><span class="__cf_email__" data-cfemail="8ffbe0e2e0e7eef6eee4eef8eebdbacfe8e2eee6e3a1ece0e2">[email&#160;protected]</span></a>
         <a href="https://www.linkedin.com/in/tomoharu-hayakawa-880116379" class="contact-link" target="_blank"><span class="contact-link-icon">◆</span>linkedin.com/in/tomoharu-hayakawa</a>
       </div>
     </div>
@@ -551,7 +551,7 @@
     data-en="Built with purpose. <a href='#hero'>↑ Back to top</a>">目的を持って構築。<a href="#hero">↑ トップへ</a></span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── LANGUAGE ──
 let currentLang = 'ja';
 const phrases = {
@@ -651,33 +651,3 @@ function toggleMenu() { const nl = document.getElementById('nav-links'); if (nl.
 
 // ── FORM ──
 function handleSubmit(e) { e.preventDefault(); const msg = document.getElementById('form-success'); msg.style.display = 'block'; e.target.reset(); setTimeout(() => msg.style.display = 'none', 5000); }
-
-// ── PHOTOS ──
-function loadPhoto(input, idx) {
-  if (!input.files || !input.files[0]) return;
-  const slot = document.getElementById('slot-' + idx);
-  const reader = new FileReader();
-  reader.onload = e => {
-    // Remove existing img if any
-    const existing = slot.querySelector('img');
-    if (existing) existing.remove();
-    const img = document.createElement('img');
-    img.src = e.target.result;
-    slot.insertBefore(img, slot.firstChild);
-    slot.classList.add('has-image');
-  };
-  reader.readAsDataURL(input.files[0]);
-}
-
-function removePhoto(idx) {
-  const slot = document.getElementById('slot-' + idx);
-  const img = slot.querySelector('img');
-  if (img) img.remove();
-  slot.classList.remove('has-image');
-  // Reset file input
-  const inp = slot.querySelector('input[type=file]');
-  inp.value = '';
-}
-</script>
-</body>
-</html>
