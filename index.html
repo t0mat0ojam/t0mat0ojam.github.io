@@ -4,25 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tomoharu Hayakawa</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:#1a1f2e;--bg2:#1f2535;--bg3:#242b3d;
     --accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;
     --text:#e2e8f0;--muted:#8494a9;--border:rgba(0,212,255,0.15);
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --serif-en:'IM Fell English',Georgia,serif;
     --mono:'Space Mono',monospace;
-    --sans:'Outfit',sans-serif;
-    --jp:'Noto Sans JP',sans-serif;
+    --jp:'Noto Serif JP',serif;
   }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{background:var(--bg);color:var(--text);font-family:var(--jp);overflow-x:hidden;cursor:none;}
-  body.lang-en{font-family:var(--sans);}
+  body.lang-en{font-family:var(--serif);}
   body.lang-en .hero-name{letter-spacing:-.02em;}
 
-  /* Cursor */
-  #cursor{position:fixed;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:screen;}
-  #cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,212,255,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+  /* Cursor — dot only, ripple on hover */
+  #cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;}
+  /* Ripple container */
+  .ripple-wave{position:fixed;border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%) scale(0);border:1.5px solid rgba(0,212,255,0.6);animation:rippleOut .7s ease-out forwards;}
+  @keyframes rippleOut{0%{transform:translate(-50%,-50%) scale(0);opacity:.8;}100%{transform:translate(-50%,-50%) scale(3.5);opacity:0;}}
 
   /* Stars */
   #stars-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.4;}
@@ -47,7 +50,7 @@
   .lang-btn.active{background:var(--accent);color:var(--bg);font-weight:700;}
   .lang-btn:not(.active):hover{color:var(--accent);background:rgba(0,212,255,.08);}
 
-  /* Lang fade transition */
+  /* Lang fade */
   .t-fade{transition:opacity .25s ease;}
   body.switching .t-fade{opacity:0;}
 
@@ -56,8 +59,8 @@
   .hero-content{max-width:800px;}
   .hero-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem;}
   .hero-label::before{content:'';display:inline-block;width:30px;height:1px;background:var(--accent);}
-  .hero-name{font-size:clamp(3rem,8vw,6.5rem);font-weight:900;line-height:1;letter-spacing:.04em;margin-bottom:.5rem;}
-  body.lang-en .hero-name{letter-spacing:-.02em;}
+  .hero-name{font-size:clamp(3rem,8vw,6.5rem);font-weight:700;line-height:1;letter-spacing:.04em;margin-bottom:.5rem;font-family:var(--jp);}
+  body.lang-en .hero-name{font-family:var(--serif-en);letter-spacing:.01em;}
   .hero-name .first{color:var(--text);}
   .hero-name .last{color:transparent;-webkit-text-stroke:1px var(--accent);}
   .hero-tagline{font-family:var(--mono);font-size:1rem;color:var(--muted);margin:1.5rem 0 2.5rem;min-height:1.5em;}
@@ -77,7 +80,8 @@
   section{position:relative;z-index:1;padding:6rem 3rem;max-width:1200px;margin:0 auto;}
   .section-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:4rem;}
   .section-num{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.15em;}
-  .section-title{font-size:2.5rem;font-weight:700;letter-spacing:-.02em;}
+  .section-title{font-size:2.5rem;font-weight:600;letter-spacing:-.01em;font-family:var(--serif);}
+  body.lang-en .section-title{font-family:var(--serif-en);}
   .section-line{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
   .section-sep{max-width:none;padding:0;width:100%;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0;}
 
@@ -94,17 +98,23 @@
   .stat-value{font-size:1.2rem;font-weight:700;color:var(--accent);}
   .stat-desc{font-size:.85rem;color:var(--muted);margin-top:.25rem;}
 
+  /* Photo section */
+  .photo-section{margin-top:3rem;}
+  .photo-section h3{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem;}
+  .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .photo-slot{background:var(--bg3);border:1px dashed var(--border);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;position:relative;overflow:hidden;transition:border-color .3s;}
+  .photo-slot:hover{border-color:rgba(0,212,255,.4);}
+  .photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .photo-slot .upload-hint{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-align:center;padding:1rem;z-index:1;}
+  .photo-slot .upload-icon{font-size:1.5rem;opacity:.3;z-index:1;}
+  .photo-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;}
+  .photo-slot .photo-label{position:absolute;bottom:0;left:0;right:0;background:rgba(26,31,46,.85);padding:.5rem .75rem;font-family:var(--mono);font-size:.6rem;color:var(--accent);letter-spacing:.08em;text-align:center;transform:translateY(100%);transition:transform .25s;}
+  .photo-slot:hover .photo-label{transform:translateY(0);}
+  .photo-slot .remove-btn{position:absolute;top:.5rem;right:.5rem;background:rgba(26,31,46,.8);border:1px solid var(--border);color:var(--muted);font-size:.65rem;font-family:var(--mono);padding:.2rem .4rem;cursor:pointer;z-index:3;display:none;}
+  .photo-slot.has-image .remove-btn{display:block;}
+  .photo-slot.has-image .upload-hint,.photo-slot.has-image .upload-icon{display:none;}
+
   /* News */
-  .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
-  .news-card{background:var(--bg2);border:1px solid var(--border);padding:1.75rem;transition:all .3s;}
-  .news-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px);}
-  .news-date{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.75rem;}
-  .news-card h3{font-size:1rem;font-weight:600;margin-bottom:.6rem;line-height:1.4;}
-  .news-card p{font-size:.85rem;color:var(--muted);line-height:1.6;}
-  .news-chip{font-family:var(--mono);font-size:.6rem;padding:.25rem .6rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid;display:inline-block;margin-bottom:.75rem;}
-  .chip-research{color:var(--accent);border-color:rgba(0,212,255,.3);}
-  .chip-award{color:#f59e0b;border-color:rgba(245,158,11,.3);}
-  .chip-event{color:var(--accent3);border-color:rgba(16,185,129,.3);}
   .news-coming-soon{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.1em;padding:2rem;border:1px dashed var(--border);text-align:center;}
 
   /* Activities */
@@ -126,22 +136,17 @@
   .award-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-4px);}
   .award-card:hover::before{opacity:1;}
   .award-year-badge{font-family:var(--mono);font-size:.6rem;color:var(--accent);letter-spacing:.1em;border:1px solid rgba(0,212,255,.2);padding:.2rem .5rem;display:inline-block;margin-bottom:.75rem;}
-  .award-card h3{font-size:.95rem;font-weight:600;margin-bottom:.4rem;line-height:1.5;}
-  .award-org{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.05em;margin-bottom:.4rem;}
-  .award-desc{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.5rem;}
+  .award-card h3{font-size:.95rem;font-weight:600;line-height:1.5;}
 
   /* Qualifications */
   .qual-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
   .qual-card{background:var(--bg2);border:1px solid var(--border);padding:1.75rem;transition:all .3s;position:relative;overflow:hidden;}
   .qual-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent2);}
   .qual-card:hover{border-color:rgba(124,58,237,.3);transform:translateY(-2px);}
-  .qual-card h3{font-size:.95rem;font-weight:600;margin-bottom:.3rem;line-height:1.4;}
-  .qual-card p{font-size:.8rem;color:var(--muted);}
+  .qual-card h3{font-size:.95rem;font-weight:600;line-height:1.4;}
 
   /* Contact */
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
-  .contact-info h3{font-size:1.5rem;font-weight:600;margin-bottom:1rem;}
-  .contact-info p{color:var(--muted);line-height:1.8;margin-bottom:2rem;}
   .contact-links{display:flex;flex-direction:column;gap:.75rem;}
   .contact-link{display:flex;align-items:center;gap:1rem;padding:.85rem 1.25rem;background:var(--bg2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:.9rem;transition:all .3s;}
   .contact-link:hover{border-color:rgba(0,212,255,.4);color:var(--accent);padding-left:1.75rem;}
@@ -150,7 +155,7 @@
   .form-field{display:flex;flex-direction:column;gap:.4rem;}
   .form-field label{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
   .form-field input,.form-field textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:.85rem 1rem;font-family:var(--jp);font-size:.9rem;outline:none;resize:vertical;transition:border-color .2s;}
-  body.lang-en .form-field input,body.lang-en .form-field textarea{font-family:var(--sans);}
+  body.lang-en .form-field input,body.lang-en .form-field textarea{font-family:var(--serif);}
   .form-field input:focus,.form-field textarea:focus{border-color:rgba(0,212,255,.5);}
   .form-submit{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 2rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-weight:700;transition:all .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);align-self:flex-start;}
   .form-submit:hover{background:#fff;transform:translateY(-2px);}
@@ -183,7 +188,6 @@
 <body>
 
 <div id="cursor"></div>
-<div id="cursor-ring"></div>
 <canvas id="stars-canvas"></canvas>
 
 <!-- NAV -->
@@ -253,14 +257,47 @@
         <div class="stat-desc  t-fade" data-ja="広尾学園高等学校（東京）在学中" data-en="Hiroo Gakuen Senior High School, Tokyo">広尾学園高等学校（東京）在学中</div>
       </div>
       <div class="stat-card" style="--accent:#10b981">
-        <div class="stat-label t-fade" data-ja="注力分野"       data-en="Focus Area">注力分野</div>
+        <div class="stat-label t-fade" data-ja="注力分野" data-en="Focus Area">注力分野</div>
         <div class="stat-value t-fade" style="color:#10b981;font-size:1rem;" data-ja="電気工学 · 人工知能" data-en="Electrical Engineering · AI">電気工学 · 人工知能</div>
-        <div class="stat-desc  t-fade" data-ja="スポーツ傷害予防への応用" data-en="Applied to sports injury prevention">スポーツ傷害予防への応用</div>
       </div>
       <div class="stat-card" style="--accent:#a78bfa">
-        <div class="stat-label t-fade" data-ja="目標"           data-en="Ambition">目標</div>
+        <div class="stat-label t-fade" data-ja="目標" data-en="Ambition">目標</div>
         <div class="stat-value t-fade" style="color:#a78bfa" data-ja="創業者兼研究者" data-en="Founder-Researcher">創業者兼研究者</div>
-        <div class="stat-desc  t-fade" data-ja="研究成果をコミュニティへ還元する" data-en="Turning research into real community impact">研究成果をコミュニティへ還元する</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="photo-section reveal">
+    <h3 class="t-fade" data-ja="フォト" data-en="Photos">フォト</h3>
+    <div class="photo-grid" id="photo-grid">
+      <div class="photo-slot" id="slot-0">
+        <span class="upload-icon">＋</span>
+        <p class="upload-hint t-fade" data-ja="クリックして写真を追加" data-en="Click to add photo">クリックして写真を追加</p>
+        <input type="file" accept="image/*" onchange="loadPhoto(this,0)">
+        <div class="photo-label t-fade" data-ja="写真 1" data-en="Photo 1">写真 1</div>
+        <button class="remove-btn" onclick="removePhoto(0)">✕</button>
+      </div>
+      <div class="photo-slot" id="slot-1">
+        <span class="upload-icon">＋</span>
+        <p class="upload-hint t-fade" data-ja="クリックして写真を追加" data-en="Click to add photo">クリックして写真を追加</p>
+        <input type="file" accept="image/*" onchange="loadPhoto(this,1)">
+        <div class="photo-label t-fade" data-ja="写真 2" data-en="Photo 2">写真 2</div>
+        <button class="remove-btn" onclick="removePhoto(1)">✕</button>
+      </div>
+      <div class="photo-slot" id="slot-2">
+        <span class="upload-icon">＋</span>
+        <p class="upload-hint t-fade" data-ja="クリックして写真を追加" data-en="Click to add photo">クリックして写真を追加</p>
+        <input type="file" accept="image/*" onchange="loadPhoto(this,2)">
+        <div class="photo-label t-fade" data-ja="写真 3" data-en="Photo 3">写真 3</div>
+        <button class="remove-btn" onclick="removePhoto(2)">✕</button>
+      </div>
+      <div class="photo-slot" id="slot-3">
+        <span class="upload-icon">＋</span>
+        <p class="upload-hint t-fade" data-ja="クリックして写真を追加" data-en="Click to add photo">クリックして写真を追加</p>
+        <input type="file" accept="image/*" onchange="loadPhoto(this,3)">
+        <div class="photo-label t-fade" data-ja="写真 4" data-en="Photo 4">写真 4</div>
+        <button class="remove-btn" onclick="removePhoto(3)">✕</button>
       </div>
     </div>
   </div>
@@ -331,13 +368,6 @@
       </p>
     </div>
 
-    <div class="activity-item">
-      <div class="activity-dot"></div>
-      <div class="activity-date t-fade" data-ja="2026年2月" data-en="FEB 2026">2026年2月</div>
-      <h3 class="t-fade" data-ja="Wharton Global High School Investment Competition 2025–2026" data-en="Wharton Global High School Investment Competition 2025–2026">Wharton Global High School Investment Competition 2025–2026</h3>
-      <p class="activity-org t-fade" data-ja="ウォートン・グローバル・ユース・プログラム" data-en="Wharton Global Youth Program">ウォートン・グローバル・ユース・プログラム</p>
-    </div>
-
   </div>
 </section>
 
@@ -354,63 +384,45 @@
 
     <div class="award-card reveal">
       <div class="award-year-badge">2026</div>
-      <h3 class="t-fade"
-        data-ja="第2回日本人工知能オリンピック — 金賞"
-        data-en="2nd Japan AI Olympics — Gold Award">第2回日本人工知能オリンピック — 金賞</h3>
+      <h3 class="t-fade" data-ja="第2回日本人工知能オリンピック — 金賞" data-en="2nd Japan AI Olympics — Gold Award">第2回日本人工知能オリンピック — 金賞</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2026</div>
-      <h3 class="t-fade"
-        data-ja="アジア太平洋人工知能オリンピック — 日本代表選抜"
-        data-en="Asia-Pacific AI Olympics — Japan National Representative">アジア太平洋人工知能オリンピック — 日本代表選抜</h3>
+      <h3 class="t-fade" data-ja="アジア太平洋人工知能オリンピック — 日本代表選抜" data-en="Asia-Pacific AI Olympics — Japan National Representative">アジア太平洋人工知能オリンピック — 日本代表選抜</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2026</div>
-      <h3 class="t-fade"
-        data-ja="Conrad Challenge 2026 — イノベーターリスト"
-        data-en="Conrad Challenge 2026 — Innovator List">Conrad Challenge 2026 — イノベーターリスト</h3>
+      <h3 class="t-fade" data-ja="Conrad Challenge 2026 — イノベーターリスト" data-en="Conrad Challenge 2026 — Innovator List">Conrad Challenge 2026 — イノベーターリスト</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2026</div>
       <h3 class="t-fade"
         data-ja="第12回マイナビキャリア甲子園 — セミファイナリスト（全国3151チーム中72位・上位2%）"
-        data-en="12th Mynavi Career Koshien — Semi-Finalist (72nd out of 3,151 teams nationally, top 2%)">第12回マイナビキャリア甲子園 — セミファイナリスト（全国3151チーム中72位・上位2%）</h3>
-      <p class="award-desc t-fade"
-        data-ja="企業課題に対する新規事業提案を行う全国規模のビジネスコンテスト。"
-        data-en="A nationwide business contest where participants propose new business solutions to real corporate challenges.">企業課題に対する新規事業提案を行う全国規模のビジネスコンテスト。</p>
+        data-en="12th Mynavi Career Koshien — Semi-Finalist (72nd / 3,151 teams, top 2%)">第12回マイナビキャリア甲子園 — セミファイナリスト（全国3151チーム中72位・上位2%）</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2025</div>
       <h3 class="t-fade"
         data-ja="World Scholar's Cup Tournament of Champions at Yale University — チーム総合33位・チームボウル&チームディベート金メダル"
-        data-en="World Scholar's Cup Tournament of Champions at Yale University — Team Overall 33rd, Gold Medals in Team Bowl & Team Debate">World Scholar's Cup Tournament of Champions at Yale University — チーム総合33位・チームボウル&チームディベート金メダル</h3>
-      <p class="award-desc t-fade"
-        data-ja="各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。"
-        data-en="A comprehensive international competition where teams that won national qualifiers compete in debate, quiz bowls, and various other disciplines.">各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。</p>
+        data-en="World Scholar's Cup ToC at Yale — Team Overall 33rd, Gold in Team Bowl & Team Debate">World Scholar's Cup Tournament of Champions at Yale University — チーム総合33位・チームボウル&チームディベート金メダル</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2025</div>
       <h3 class="t-fade"
         data-ja="World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology 個人世界19位"
-        data-en="World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology Individual World 19th">World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology 個人世界19位</h3>
-      <p class="award-desc t-fade"
-        data-ja="各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。"
-        data-en="A comprehensive international competition where teams that won national qualifiers compete in debate, quiz bowls, and various other disciplines.">各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。</p>
+        data-en="World Scholar's Cup ToC at Yale — Science &amp; Technology Individual World 19th">World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology 個人世界19位</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2025</div>
       <h3 class="t-fade"
         data-ja="World Scholar's Cup Kuala Lumpur Global Round — チーム総合25位・チームディベート/ボウル/ライティング/個人ディベート 全部門金メダル"
-        data-en="World Scholar's Cup Kuala Lumpur Global Round — Team Overall 25th, Gold Medals in Team Debate / Bowl / Writing &amp; Individual Debate">World Scholar's Cup Kuala Lumpur Global Round — チーム総合25位・全部門金メダル</h3>
-      <p class="award-desc t-fade"
-        data-ja="各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。"
-        data-en="A comprehensive international competition where teams that won national qualifiers compete in debate, quiz bowls, and various other disciplines.">各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。</p>
+        data-en="World Scholar's Cup KL Global Round — Team Overall 25th, Gold in All Divisions (Team Debate / Bowl / Writing & Individual Debate)">World Scholar's Cup Kuala Lumpur Global Round — チーム総合25位・全部門金メダル</h3>
     </div>
 
     <div class="award-card reveal">
@@ -418,39 +430,27 @@
       <h3 class="t-fade"
         data-ja="FedEx / Junior Achievement International Trade Challenge アジア太平洋大会 — 日本代表として出場"
         data-en="FedEx / JA International Trade Challenge Asia-Pacific — Japan National Representative">FedEx / Junior Achievement International Trade Challenge アジア太平洋大会 — 日本代表として出場</h3>
-      <p class="award-desc t-fade"
-        data-ja="各国予選を勝ち抜き代表となった人が出場する英語による国際ビジネス提案コンテスト。"
-        data-en="An English-language international business proposal contest open to national representatives who won their respective qualifiers.">各国予選を勝ち抜き代表となった人が出場する英語による国際ビジネス提案コンテスト。</p>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2025</div>
       <h3 class="t-fade"
         data-ja="FedEx / Junior Achievement International Trade Challenge 日本大会 — 全国2位・アジア太平洋大会 日本代表"
-        data-en="FedEx / JA International Trade Challenge Japan — 2nd Place Nationally, Japan Representative for Asia-Pacific">FedEx / Junior Achievement International Trade Challenge 日本大会 — 全国2位・アジア太平洋大会 日本代表</h3>
-      <p class="award-desc t-fade"
-        data-ja="約130チームが参加した英語による国際ビジネス提案コンテスト。"
-        data-en="An English-language international business proposal contest with approximately 130 participating teams.">約130チームが参加した英語による国際ビジネス提案コンテスト。</p>
+        data-en="FedEx / JA International Trade Challenge Japan — 2nd Place Nationally, Japan Rep for Asia-Pacific">FedEx / Junior Achievement International Trade Challenge 日本大会 — 全国2位・アジア太平洋大会 日本代表</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2025</div>
       <h3 class="t-fade"
         data-ja="World Scholar's Cup Tokyo Regional Round — チーム総合4位・チームディベート2位・チームライティング4位"
-        data-en="World Scholar's Cup Tokyo Regional Round — Team Overall 4th, Team Debate 2nd, Team Writing 4th">World Scholar's Cup Tokyo Regional Round — チーム総合4位・チームディベート2位・チームライティング4位</h3>
-      <p class="award-desc t-fade"
-        data-ja="チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。"
-        data-en="A nationwide qualifying round of a comprehensive competition where teams compete in debate, quiz bowls, and other disciplines.">チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。</p>
+        data-en="World Scholar's Cup Tokyo Regional — Team Overall 4th, Team Debate 2nd, Team Writing 4th">World Scholar's Cup Tokyo Regional Round — チーム総合4位・チームディベート2位・チームライティング4位</h3>
     </div>
 
     <div class="award-card reveal">
       <div class="award-year-badge">2025</div>
       <h3 class="t-fade"
         data-ja="World Scholar's Cup Tokyo Regional Round — 個人総合4位・個人ディベート2位・全5科目＋特別分野すべて金メダル"
-        data-en="World Scholar's Cup Tokyo Regional Round — Individual Overall 4th, Individual Debate 2nd, Gold Medals in All 5 Subjects &amp; Special Area">World Scholar's Cup Tokyo Regional Round — 個人総合4位・個人ディベート2位・全5科目＋特別分野すべて金メダル</h3>
-      <p class="award-desc t-fade"
-        data-ja="チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。"
-        data-en="A nationwide qualifying round of a comprehensive competition where teams compete in debate, quiz bowls, and other disciplines.">チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。</p>
+        data-en="World Scholar's Cup Tokyo Regional — Individual Overall 4th, Individual Debate 2nd, Gold in All 5 Subjects &amp; Special Area">World Scholar's Cup Tokyo Regional Round — 個人総合4位・個人ディベート2位・全5科目＋特別分野すべて金メダル</h3>
     </div>
 
     <div class="award-card reveal">
@@ -458,9 +458,6 @@
       <h3 class="t-fade"
         data-ja="第7回日本中学生パーラメンタリーディベート大会 — 13th Best Speaker"
         data-en="7th Japan Junior High School Parliamentary Debate Championship — 13th Best Speaker">第7回日本中学生パーラメンタリーディベート大会 — 13th Best Speaker</h3>
-      <p class="award-desc t-fade"
-        data-ja="全国規模の英語ディベート大会。"
-        data-en="A nationwide English debate competition.">全国規模の英語ディベート大会。</p>
     </div>
 
   </div>
@@ -478,63 +475,43 @@
   <div class="qual-grid">
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="The Junior Academy at The New York Academy of Sciences — メンバー"
-        data-en="The Junior Academy at The New York Academy of Sciences — Member">The Junior Academy at The New York Academy of Sciences — メンバー</h3>
+      <h3 class="t-fade" data-ja="The Junior Academy at The New York Academy of Sciences — メンバー" data-en="The Junior Academy at The New York Academy of Sciences — Member">The Junior Academy at The New York Academy of Sciences — メンバー</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="Junior Achievement Japan Alumni Network — メンバー"
-        data-en="Junior Achievement Japan Alumni Network — Member">Junior Achievement Japan Alumni Network — メンバー</h3>
+      <h3 class="t-fade" data-ja="Junior Achievement Japan Alumni Network — メンバー" data-en="Junior Achievement Japan Alumni Network — Member">Junior Achievement Japan Alumni Network — メンバー</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="Junior Achievement Asia Pacific Alumni Network — メンバー"
-        data-en="Junior Achievement Asia Pacific Alumni Network — Member">Junior Achievement Asia Pacific Alumni Network — メンバー</h3>
+      <h3 class="t-fade" data-ja="Junior Achievement Asia Pacific Alumni Network — メンバー" data-en="Junior Achievement Asia Pacific Alumni Network — Member">Junior Achievement Asia Pacific Alumni Network — メンバー</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="英検一級 合格（2023年）"
-        data-en="EIKEN Grade 1 — Passed (2023)">英検一級 合格（2023年）</h3>
+      <h3 class="t-fade" data-ja="英検一級 合格（2023年）" data-en="EIKEN Grade 1 — Passed (2023)">英検一級 合格（2023年）</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="TOEFL 107点 取得（2023年）"
-        data-en="TOEFL Score 107 (2023)">TOEFL 107点 取得（2023年）</h3>
+      <h3 class="t-fade" data-ja="TOEFL 107点 取得（2023年）" data-en="TOEFL Score 107 (2023)">TOEFL 107点 取得（2023年）</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="つくばScience Edge Science Idea Contest — ブースポスタープレゼンテーション採択（2026年）"
-        data-en="Tsukuba Science Edge Science Idea Contest — Poster Presentation Selected (2026)">つくばScience Edge Science Idea Contest — ブースポスタープレゼンテーション採択（2026年）</h3>
+      <h3 class="t-fade" data-ja="つくばScience Edge Science Idea Contest — ブースポスタープレゼンテーション採択（2026年）" data-en="Tsukuba Science Edge Science Idea Contest — Poster Presentation Selected (2026)">つくばScience Edge Science Idea Contest — ブースポスタープレゼンテーション採択（2026年）</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="国立情報学研究所 情報科学の達人プログラム 7期生 採択（2026年）"
-        data-en="NII Jouhou Kagaku no Tatsujin Program — 7th Cohort Selected (2026)">国立情報学研究所 情報科学の達人プログラム 7期生 採択（2026年）</h3>
+      <h3 class="t-fade" data-ja="国立情報学研究所 情報科学の達人プログラム 7期生 採択（2026年）" data-en="NII Jouhou Kagaku no Tatsujin Program — 7th Cohort Selected (2026)">国立情報学研究所 情報科学の達人プログラム 7期生 採択（2026年）</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="電気学会 U-21 学生研究発表会 — 口頭発表・佳作受賞（2026年）"
-        data-en="IEEJ U-21 Student Research Presentation — Oral Presentation, Honorable Mention (2026)">電気学会 U-21 学生研究発表会 — 口頭発表・佳作受賞（2026年）</h3>
+      <h3 class="t-fade" data-ja="電気学会 U-21 学生研究発表会 — 口頭発表・佳作受賞（2026年）" data-en="IEEJ U-21 Student Research Presentation — Oral Presentation, Honorable Mention (2026)">電気学会 U-21 学生研究発表会 — 口頭発表・佳作受賞（2026年）</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="第10回サステナブル・ブランド国際会議2026 東京・丸の内 — 口頭発表（2026年）"
-        data-en="10th Sustainable Brands International Conference 2026 Tokyo Marunouchi — Oral Presentation (2026)">第10回サステナブル・ブランド国際会議2026 東京・丸の内 — 口頭発表（2026年）</h3>
+      <h3 class="t-fade" data-ja="第10回サステナブル・ブランド国際会議2026 東京・丸の内 — 口頭発表（2026年）" data-en="10th Sustainable Brands International Conference 2026 Tokyo Marunouchi — Oral Presentation (2026)">第10回サステナブル・ブランド国際会議2026 東京・丸の内 — 口頭発表（2026年）</h3>
     </div>
 
     <div class="qual-card reveal">
-      <h3 class="t-fade"
-        data-ja="IHRP 全国高校生異分野融合型研究プログラム — 採択（2025年）"
-        data-en="IHRP National High School Interdisciplinary Research Program — Selected (2025)">IHRP 全国高校生異分野融合型研究プログラム — 採択（2025年）</h3>
+      <h3 class="t-fade" data-ja="IHRP 全国高校生異分野融合型研究プログラム — 採択（2025年）" data-en="IHRP National High School Interdisciplinary Research Program — Selected (2025)">IHRP 全国高校生異分野融合型研究プログラム — 採択（2025年）</h3>
     </div>
 
   </div>
@@ -551,12 +528,6 @@
   </div>
   <div class="contact-grid">
     <div class="contact-info reveal">
-      <h3 class="t-fade" data-ja="繋がりましょう。" data-en="Let's connect.">繋がりましょう。</h3>
-      <p class="t-fade"
-        data-ja="研究仲間、潜在的な協力者、メンター、または私の研究に興味がある方 — ぜひご連絡ください。"
-        data-en="Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you.">
-        研究仲間、潜在的な協力者、メンター、または私の研究に興味がある方 — ぜひご連絡ください。
-      </p>
       <div class="contact-links">
         <a href="mailto:tomohayakawa25@gmail.com" class="contact-link"><span class="contact-link-icon">✉</span>tomohayakawa25@gmail.com</a>
         <a href="https://www.linkedin.com/in/tomoharu-hayakawa-880116379" class="contact-link" target="_blank"><span class="contact-link-icon">◆</span>linkedin.com/in/tomoharu-hayakawa</a>
@@ -564,16 +535,16 @@
     </div>
     <form class="contact-form reveal" onsubmit="handleSubmit(event)">
       <div class="form-field">
-        <label class="t-fade" data-ja="お名前"        data-en="Name">お名前</label>
-        <input type="text"  id="inp-name"  placeholder="お名前" required>
+        <label class="t-fade" data-ja="お名前" data-en="Name">お名前</label>
+        <input type="text" id="inp-name" placeholder="お名前" required>
       </div>
       <div class="form-field">
         <label class="t-fade" data-ja="メールアドレス" data-en="Email">メールアドレス</label>
         <input type="email" id="inp-email" placeholder="your@email.com" required>
       </div>
       <div class="form-field">
-        <label class="t-fade" data-ja="メッセージ"    data-en="Message">メッセージ</label>
-        <textarea rows="5"  id="inp-msg"   placeholder="あなたや、あなたのアイデアについて教えてください..." required></textarea>
+        <label class="t-fade" data-ja="メッセージ" data-en="Message">メッセージ</label>
+        <textarea rows="5" id="inp-msg" placeholder="あなたや、あなたのアイデアについて教えてください..." required></textarea>
       </div>
       <button type="submit" class="form-submit t-fade" data-ja="送信する →" data-en="Send Message →">送信する →</button>
       <p id="form-success" style="font-family:var(--mono);font-size:.7rem;color:var(--accent3);display:none;" class="t-fade"
@@ -593,7 +564,7 @@
 </footer>
 
 <script>
-// ── LANGUAGE (default: ja) ──
+// ── LANGUAGE ──
 let currentLang = 'ja';
 const phrases = {
   ja: ['高校生研究者。','将来の起業家。','未来を構築中。','研究 → 地域社会への貢献。','好奇心主導。行動重視。'],
@@ -634,48 +605,91 @@ function setLang(lang) {
   }, 280);
 }
 
-// ── CURSOR ──
+// ── CURSOR — dot + ripple on hover ──
 const cursor = document.getElementById('cursor');
-const ring   = document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
-(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
-document.querySelectorAll('a,button,.award-card,.news-card,.qual-card,.activity-item').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='50px'; ring.style.height='50px'; });
-  el.addEventListener('mouseleave',()=>{ cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+function spawnRipple(x, y, size) {
+  const r = document.createElement('div');
+  r.className = 'ripple-wave';
+  r.style.left   = x + 'px';
+  r.style.top    = y + 'px';
+  r.style.width  = size + 'px';
+  r.style.height = size + 'px';
+  document.body.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+}
+
+document.querySelectorAll('a,button,.award-card,.qual-card,.activity-item,.stat-card,.photo-slot').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    spawnRipple(mx, my, 48);
+    setTimeout(() => spawnRipple(mx, my, 36), 120);
+  });
 });
 
 // ── STARS ──
-const canvas=document.getElementById('stars-canvas'), ctx=canvas.getContext('2d'); let stars=[];
-function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
-function initStars(){ stars=[]; for(let i=0;i<180;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2,speed:Math.random()*.25+.04,op:Math.random()}); }
-(function drawStars(){ ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s=>{ ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(180,220,255,${s.op})`; ctx.fill(); s.y+=s.speed; s.op=.2+Math.abs(Math.sin(Date.now()*.001+s.x))*.6; if(s.y>canvas.height){s.y=0;s.x=Math.random()*canvas.width;} }); requestAnimationFrame(drawStars); })();
-resizeCanvas(); initStars(); window.addEventListener('resize',()=>{ resizeCanvas(); initStars(); });
+const canvas = document.getElementById('stars-canvas'), ctx = canvas.getContext('2d'); let stars = [];
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+function initStars() { stars = []; for (let i = 0; i < 180; i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2,speed:Math.random()*.25+.04,op:Math.random()}); }
+(function drawStars() { ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(180,220,255,${s.op})`; ctx.fill(); s.y+=s.speed; s.op=.2+Math.abs(Math.sin(Date.now()*.001+s.x))*.6; if(s.y>canvas.height){s.y=0;s.x=Math.random()*canvas.width;} }); requestAnimationFrame(drawStars); })();
+resizeCanvas(); initStars(); window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
 
 // ── TYPING ──
 let pIdx=0, cIdx=0, deleting=false, typeTimer;
-const typedEl=document.getElementById('typed');
-function type(){
-  const list=phrases[currentLang], phrase=list[pIdx%list.length];
-  if(!deleting){ typedEl.textContent=phrase.substring(0,++cIdx); if(cIdx===phrase.length){ setTimeout(()=>deleting=true,2000); typeTimer=setTimeout(type,100); return; } }
-  else { typedEl.textContent=phrase.substring(0,--cIdx); if(cIdx===0){ deleting=false; pIdx=(pIdx+1)%list.length; } }
-  typeTimer=setTimeout(type,deleting?50:90);
+const typedEl = document.getElementById('typed');
+function type() {
+  const list = phrases[currentLang], phrase = list[pIdx % list.length];
+  if (!deleting) { typedEl.textContent = phrase.substring(0, ++cIdx); if (cIdx === phrase.length) { setTimeout(() => deleting = true, 2000); typeTimer = setTimeout(type, 100); return; } }
+  else { typedEl.textContent = phrase.substring(0, --cIdx); if (cIdx === 0) { deleting = false; pIdx = (pIdx + 1) % list.length; } }
+  typeTimer = setTimeout(type, deleting ? 50 : 90);
 }
 type();
 
 // ── SCROLL REVEAL ──
-const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),100); }),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), 100); }), {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 // ── ACTIVE NAV ──
-const secs=document.querySelectorAll('section[id]'), nls=document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll',()=>{ let cur=''; secs.forEach(s=>{ if(window.scrollY>=s.offsetTop-200) cur=s.id; }); nls.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur)); });
+const secs = document.querySelectorAll('section[id]'), nls = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => { let cur = ''; secs.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; }); nls.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur)); });
 
 // ── MOBILE MENU ──
-function toggleMenu(){ const nl=document.getElementById('nav-links'); if(nl.style.display==='flex'){ nl.style.display=''; } else { nl.style.cssText='display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:rgba(26,31,46,.97);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border);z-index:999;'; } }
+function toggleMenu() { const nl = document.getElementById('nav-links'); if (nl.style.display === 'flex') { nl.style.display = ''; } else { nl.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:rgba(26,31,46,.97);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border);z-index:999;'; } }
 
 // ── FORM ──
-function handleSubmit(e){ e.preventDefault(); const msg=document.getElementById('form-success'); msg.style.display='block'; e.target.reset(); setTimeout(()=>msg.style.display='none',5000); }
+function handleSubmit(e) { e.preventDefault(); const msg = document.getElementById('form-success'); msg.style.display = 'block'; e.target.reset(); setTimeout(() => msg.style.display = 'none', 5000); }
+
+// ── PHOTOS ──
+function loadPhoto(input, idx) {
+  if (!input.files || !input.files[0]) return;
+  const slot = document.getElementById('slot-' + idx);
+  const reader = new FileReader();
+  reader.onload = e => {
+    // Remove existing img if any
+    const existing = slot.querySelector('img');
+    if (existing) existing.remove();
+    const img = document.createElement('img');
+    img.src = e.target.result;
+    slot.insertBefore(img, slot.firstChild);
+    slot.classList.add('has-image');
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function removePhoto(idx) {
+  const slot = document.getElementById('slot-' + idx);
+  const img = slot.querySelector('img');
+  if (img) img.remove();
+  slot.classList.remove('has-image');
+  // Reset file input
+  const inp = slot.querySelector('input[type=file]');
+  inp.value = '';
+}
 </script>
 </body>
 </html>
