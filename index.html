@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +16,9 @@
   }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;cursor:none;}
-  body.lang-ja{font-family:var(--jp);}
-  body.lang-ja .hero-name{letter-spacing:0.04em;}
+  body{background:var(--bg);color:var(--text);font-family:var(--jp);overflow-x:hidden;cursor:none;}
+  body.lang-en{font-family:var(--sans);}
+  body.lang-en .hero-name{letter-spacing:-.02em;}
 
   /* Cursor */
   #cursor{position:fixed;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:screen;}
@@ -56,7 +56,8 @@
   .hero-content{max-width:800px;}
   .hero-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem;}
   .hero-label::before{content:'';display:inline-block;width:30px;height:1px;background:var(--accent);}
-  .hero-name{font-size:clamp(3rem,8vw,6.5rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .hero-name{font-size:clamp(3rem,8vw,6.5rem);font-weight:900;line-height:1;letter-spacing:.04em;margin-bottom:.5rem;}
+  body.lang-en .hero-name{letter-spacing:-.02em;}
   .hero-name .first{color:var(--text);}
   .hero-name .last{color:transparent;-webkit-text-stroke:1px var(--accent);}
   .hero-tagline{font-family:var(--mono);font-size:1rem;color:var(--muted);margin:1.5rem 0 2.5rem;min-height:1.5em;}
@@ -93,28 +94,6 @@
   .stat-value{font-size:1.4rem;font-weight:700;color:var(--accent);}
   .stat-desc{font-size:.85rem;color:var(--muted);margin-top:.25rem;}
 
-  /* Research */
-  .research-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
-  .research-card{background:var(--bg2);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:all .3s;}
-  .research-card:hover{border-color:rgba(0,212,255,.5);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4);}
-  .research-tag{font-family:var(--mono);font-size:.65rem;padding:.3rem .75rem;background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.2);letter-spacing:.1em;text-transform:uppercase;display:inline-block;margin-bottom:1rem;}
-  .research-card h3{font-size:1.1rem;font-weight:600;margin-bottom:.75rem;line-height:1.4;}
-  .research-card p{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;}
-  .research-status{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.7rem;color:var(--accent3);}
-  .status-dot{width:6px;height:6px;background:var(--accent3);border-radius:50%;animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
-
-  /* Projects */
-  .projects-list{display:flex;flex-direction:column;gap:1px;}
-  .project-item{display:grid;grid-template-columns:60px 1fr auto;align-items:center;gap:2rem;padding:1.75rem 1.5rem;background:var(--bg2);border:1px solid transparent;border-bottom:1px solid var(--border);transition:all .3s;}
-  .project-item:hover{background:var(--bg3);border-color:var(--border);border-bottom-color:rgba(0,212,255,.3);padding-left:2rem;}
-  .project-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);}
-  .project-info h3{font-size:1.1rem;font-weight:600;margin-bottom:.3rem;}
-  .project-info p{font-size:.85rem;color:var(--muted);}
-  .project-tags{display:flex;gap:.5rem;flex-wrap:wrap;}
-  .tag{font-family:var(--mono);font-size:.6rem;padding:.2rem .6rem;border:1px solid var(--border);color:var(--muted);letter-spacing:.05em;}
-  .tag.accent{border-color:rgba(0,212,255,.3);color:var(--accent);}
-
   /* News */
   .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
   .news-card{background:var(--bg2);border:1px solid var(--border);padding:1.75rem;transition:all .3s;}
@@ -139,15 +118,25 @@
   .activity-item p{font-size:.875rem;color:var(--muted);line-height:1.6;}
 
   /* Awards */
-  .awards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;}
-  .award-card{background:var(--bg2);border:1px solid var(--border);padding:2rem 1.75rem;text-align:center;position:relative;overflow:hidden;transition:all .3s;}
+  .awards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+  .award-card{background:var(--bg2);border:1px solid var(--border);padding:2rem 1.75rem;position:relative;overflow:hidden;transition:all .3s;}
   .award-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s;}
   .award-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-4px);}
   .award-card:hover::before{opacity:1;}
-  .award-icon{font-size:2rem;margin-bottom:1rem;display:block;}
-  .award-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem;}
+  .award-icon{font-size:1.5rem;margin-bottom:.75rem;display:block;}
+  .award-year-badge{font-family:var(--mono);font-size:.6rem;color:var(--accent);letter-spacing:.1em;border:1px solid rgba(0,212,255,.2);padding:.2rem .5rem;display:inline-block;margin-bottom:.75rem;}
+  .award-card h3{font-size:.95rem;font-weight:600;margin-bottom:.4rem;line-height:1.5;}
   .award-org{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.05em;margin-bottom:.4rem;}
-  .award-year{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
+  .award-desc{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.5rem;}
+
+  /* Qualifications */
+  .qual-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+  .qual-card{background:var(--bg2);border:1px solid var(--border);padding:1.75rem;transition:all .3s;position:relative;overflow:hidden;}
+  .qual-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent2);}
+  .qual-card:hover{border-color:rgba(124,58,237,.3);transform:translateY(-2px);}
+  .qual-icon{font-size:1.5rem;margin-bottom:.75rem;display:block;}
+  .qual-card h3{font-size:.95rem;font-weight:600;margin-bottom:.3rem;line-height:1.4;}
+  .qual-card p{font-size:.8rem;color:var(--muted);}
 
   /* Contact */
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
@@ -160,8 +149,8 @@
   .contact-form{display:flex;flex-direction:column;gap:1rem;}
   .form-field{display:flex;flex-direction:column;gap:.4rem;}
   .form-field label{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
-  .form-field input,.form-field textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:.85rem 1rem;font-family:var(--sans);font-size:.9rem;outline:none;resize:vertical;transition:border-color .2s;}
-  body.lang-ja .form-field input,body.lang-ja .form-field textarea{font-family:var(--jp);}
+  .form-field input,.form-field textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:.85rem 1rem;font-family:var(--jp);font-size:.9rem;outline:none;resize:vertical;transition:border-color .2s;}
+  body.lang-en .form-field input,body.lang-en .form-field textarea{font-family:var(--sans);}
   .form-field input:focus,.form-field textarea:focus{border-color:rgba(0,212,255,.5);}
   .form-submit{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 2rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-weight:700;transition:all .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);align-self:flex-start;}
   .form-submit:hover{background:#fff;transform:translateY(-2px);}
@@ -203,18 +192,17 @@
 <nav>
   <a href="#hero" class="nav-logo">TH<span>.init()</span></a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="#vision"     data-en="Vision"      data-ja="ビジョン">Vision</a></li>
-    <li><a href="#research"   data-en="Research"    data-ja="研究">Research</a></li>
-    <li><a href="#projects"   data-en="Projects"    data-ja="プロジェクト">Projects</a></li>
-    <li><a href="#news"       data-en="News"        data-ja="ニュース">News</a></li>
-    <li><a href="#activities" data-en="Activities"  data-ja="活動">Activities</a></li>
-    <li><a href="#awards"     data-en="Awards"      data-ja="受賞">Awards</a></li>
-    <li><a href="#contact"    data-en="Contact"     data-ja="連絡">Contact</a></li>
+    <li><a href="#vision"     data-ja="ビジョン"      data-en="Vision">ビジョン</a></li>
+    <li><a href="#news"       data-ja="ニュース"      data-en="News">ニュース</a></li>
+    <li><a href="#activities" data-ja="活動"          data-en="Activities">活動</a></li>
+    <li><a href="#awards"     data-ja="受賞歴"        data-en="Awards">受賞歴</a></li>
+    <li><a href="#quals"      data-ja="資格・所属"    data-en="Qualifications">資格・所属</a></li>
+    <li><a href="#contact"    data-ja="連絡"          data-en="Contact">連絡</a></li>
   </ul>
   <div class="nav-right">
     <div class="lang-toggle">
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn"        id="btn-ja" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn active" id="btn-ja" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
     </div>
     <div class="nav-toggle" onclick="toggleMenu()">
       <span></span><span></span><span></span>
@@ -225,19 +213,19 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-content">
-    <div class="hero-label t-fade" data-en="Researcher · Entrepreneur · Changemaker" data-ja="研究者 · 起業家 · 社会変革者">Researcher · Entrepreneur · Changemaker</div>
+    <div class="hero-label t-fade" data-ja="研究者 · 起業家 · 社会変革者" data-en="Researcher · Entrepreneur · Changemaker">研究者 · 起業家 · 社会変革者</div>
     <div class="hero-name">
-      <div class="first t-fade" data-en="Tomoharu" data-ja="早川">Tomoharu</div>
-      <div class="last  t-fade" data-en="Hayakawa" data-ja="友治">Hayakawa</div>
+      <div class="first t-fade" data-ja="早川" data-en="Tomoharu">早川</div>
+      <div class="last  t-fade" data-ja="友治" data-en="Hayakawa">友治</div>
     </div>
     <p class="hero-tagline"><span class="typed-text" id="typed"></span><span class="cursor-blink"></span></p>
     <div class="hero-cta">
-      <a href="#research" class="btn-primary t-fade" data-en="View Research"  data-ja="研究を見る">View Research</a>
-      <a href="#contact"  class="btn-outline  t-fade" data-en="Get in Touch"   data-ja="お問合せ">Get in Touch</a>
+      <a href="#research" class="btn-primary t-fade" data-ja="研究を見る"  data-en="View Research">研究を見る</a>
+      <a href="#contact"  class="btn-outline  t-fade" data-ja="お問合せ"    data-en="Get in Touch">お問合せ</a>
     </div>
   </div>
   <div class="hero-scroll">
-    <span class="t-fade" data-en="SCROLL" data-ja="スクロール">SCROLL</span>
+    <span class="t-fade" data-ja="スクロール" data-en="SCROLL">スクロール</span>
     <div class="scroll-line"></div>
   </div>
 </section>
@@ -248,110 +236,34 @@
 <section id="vision">
   <div class="section-header reveal">
     <span class="section-num">01</span>
-    <h2 class="section-title t-fade" data-en="Vision" data-ja="ビジョン">Vision</h2>
+    <h2 class="section-title t-fade" data-ja="ビジョン" data-en="Vision">ビジョン</h2>
     <div class="section-line"></div>
   </div>
   <div class="vision-grid">
     <div class="vision-text reveal t-fade"
-      data-en="<p>I'm a high schooler on a mission: to push the boundaries of research and transform discoveries into <strong>real-world impact</strong> for communities around me.</p><p>My journey begins at the intersection of <strong>curiosity and action</strong> — exploring scientific questions that matter, then building ventures that carry those answers from the lab into everyday life.</p><p>I believe the next generation of entrepreneurs won't just build companies. They'll be <strong>researcher-founders</strong> who see problems others miss and have the tools to solve them from first principles.</p><p>My goal is simple: conduct meaningful research, then <strong>give it back</strong> — to my community, to society, and to the world.</p>"
-      data-ja="<p>私は使命を持った高校生です。研究の限界を押し広げ、発見を<strong>実社会のインパクト</strong>へと変えることを目指しています。</p><p>私の旅は<strong>好奇心と行動</strong>の交差点から始まります。重要な科学的疑問を探求し、その答えを研究室から日常生活へ運ぶ事業を構築することです。</p><p>次世代の起業家はただ会社を作るだけではないと信じています。他者が見逃す問題を発見し、第一原理からそれを解決できる<strong>研究者起業家</strong>になるでしょう。</p><p>私の目標はシンプルです。意義ある研究を行い、その成果を<strong>コミュニティ、社会、そして世界に還元する</strong>ことです。</p>">
-      <p>I'm a high schooler on a mission: to push the boundaries of research and transform discoveries into <strong>real-world impact</strong> for communities around me.</p>
-      <p>My journey begins at the intersection of <strong>curiosity and action</strong> — exploring scientific questions that matter, then building ventures that carry those answers from the lab into everyday life.</p>
-      <p>I believe the next generation of entrepreneurs won't just build companies. They'll be <strong>researcher-founders</strong> who see problems others miss and have the tools to solve them from first principles.</p>
-      <p>My goal is simple: conduct meaningful research, then <strong>give it back</strong> — to my community, to society, and to the world.</p>
+      data-ja="<p>私は使命を持った高校生です。研究の限界を押し広げ、発見を<strong>実社会のインパクト</strong>へと変えることを目指しています。</p><p>私の旅は<strong>好奇心と行動</strong>の交差点から始まります。重要な科学的疑問を探求し、その答えを研究室から日常生活へ運ぶ事業を構築することです。</p><p>次世代の起業家はただ会社を作るだけではないと信じています。他者が見逃す問題を発見し、第一原理からそれを解決できる<strong>研究者起業家</strong>になるでしょう。</p><p>私の目標はシンプルです。意義ある研究を行い、その成果を<strong>コミュニティ、社会、そして世界に還元する</strong>ことです。</p>"
+      data-en="<p>I'm a high schooler on a mission: to push the boundaries of research and transform discoveries into <strong>real-world impact</strong> for communities around me.</p><p>My journey begins at the intersection of <strong>curiosity and action</strong> — exploring scientific questions that matter, then building ventures that carry those answers from the lab into everyday life.</p><p>I believe the next generation of entrepreneurs won't just build companies. They'll be <strong>researcher-founders</strong> who see problems others miss and have the tools to solve them from first principles.</p><p>My goal is simple: conduct meaningful research, then <strong>give it back</strong> — to my community, to society, and to the world.</p>">
+      <p>私は使命を持った高校生です。研究の限界を押し広げ、発見を<strong>実社会のインパクト</strong>へと変えることを目指しています。</p>
+      <p>私の旅は<strong>好奇心と行動</strong>の交差点から始まります。重要な科学的疑問を探求し、その答えを研究室から日常生活へ運ぶ事業を構築することです。</p>
+      <p>次世代の起業家はただ会社を作るだけではないと信じています。他者が見逃す問題を発見し、第一原理からそれを解決できる<strong>研究者起業家</strong>になるでしょう。</p>
+      <p>私の目標はシンプルです。意義ある研究を行い、その成果を<strong>コミュニティ、社会、そして世界に還元する</strong>ことです。</p>
     </div>
     <div class="vision-stats reveal">
       <div class="stat-card">
-        <div class="stat-label t-fade" data-en="Current Status"   data-ja="現在の状況">Current Status</div>
-        <div class="stat-value t-fade" data-en="High School"      data-ja="高校生">High School</div>
-        <div class="stat-desc  t-fade" data-en="Active researcher & aspiring entrepreneur" data-ja="現役研究者・将来の起業家">Active researcher & aspiring entrepreneur</div>
+        <div class="stat-label t-fade" data-ja="現在の状況"   data-en="Current Status">現在の状況</div>
+        <div class="stat-value t-fade" data-ja="高校生"        data-en="High School">高校生</div>
+        <div class="stat-desc  t-fade" data-ja="現役研究者・将来の起業家" data-en="Active researcher & aspiring entrepreneur">現役研究者・将来の起業家</div>
       </div>
       <div class="stat-card" style="--accent:#10b981">
-        <div class="stat-label t-fade" data-en="Focus Area"       data-ja="注力分野">Focus Area</div>
-        <div class="stat-value t-fade" style="color:#10b981" data-en="Research → Impact" data-ja="研究 → 社会貢献">Research → Impact</div>
-        <div class="stat-desc  t-fade" data-en="Turning findings into community solutions" data-ja="発見をコミュニティの解決策へ">Turning findings into community solutions</div>
+        <div class="stat-label t-fade" data-ja="注力分野"       data-en="Focus Area">注力分野</div>
+        <div class="stat-value t-fade" style="color:#10b981" data-ja="研究 → 社会貢献" data-en="Research → Impact">研究 → 社会貢献</div>
+        <div class="stat-desc  t-fade" data-ja="発見をコミュニティの解決策へ" data-en="Turning findings into community solutions">発見をコミュニティの解決策へ</div>
       </div>
       <div class="stat-card" style="--accent:#a78bfa">
-        <div class="stat-label t-fade" data-en="Ambition"         data-ja="目標">Ambition</div>
-        <div class="stat-value t-fade" style="color:#a78bfa" data-en="Founder-Researcher" data-ja="創業者兼研究者">Founder-Researcher</div>
-        <div class="stat-desc  t-fade" data-en="Bridging science and entrepreneurship" data-ja="科学と起業家精神の架け橋">Bridging science and entrepreneurship</div>
+        <div class="stat-label t-fade" data-ja="目標"           data-en="Ambition">目標</div>
+        <div class="stat-value t-fade" style="color:#a78bfa" data-ja="創業者兼研究者" data-en="Founder-Researcher">創業者兼研究者</div>
+        <div class="stat-desc  t-fade" data-ja="科学と起業家精神の架け橋" data-en="Bridging science and entrepreneurship">科学と起業家精神の架け橋</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-sep"></div>
-
-<!-- RESEARCH -->
-<section id="research">
-  <div class="section-header reveal">
-    <span class="section-num">02</span>
-    <h2 class="section-title t-fade" data-en="Research" data-ja="研究">Research</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="research-grid">
-    <div class="research-card reveal">
-      <span class="research-tag t-fade" data-en="Ongoing" data-ja="進行中">Ongoing</span>
-      <h3 class="t-fade" data-en="Primary Research Project" data-ja="主要研究プロジェクト">Primary Research Project</h3>
-      <p class="t-fade" data-en="Update this with your actual research topic. Describe the problem you're solving, your methodology, and what you hope to discover." data-ja="実際の研究テーマに更新してください。解決しようとしている問題、方法論、発見したいことを説明してください。">Update this with your actual research topic. Describe the problem you're solving, your methodology, and what you hope to discover.</p>
-      <div class="research-status"><div class="status-dot"></div><span class="t-fade" data-en="Active — In Progress" data-ja="進行中">Active — In Progress</span></div>
-    </div>
-    <div class="research-card reveal">
-      <span class="research-tag t-fade" style="background:rgba(124,58,237,.1);color:#a78bfa;border-color:rgba(124,58,237,.2);" data-en="Exploring" data-ja="探索中">Exploring</span>
-      <h3 class="t-fade" data-en="Secondary Research Interest" data-ja="第二の研究関心">Secondary Research Interest</h3>
-      <p class="t-fade" data-en="Add your second area of research interest here. What questions fascinate you? What gaps in knowledge are you trying to fill?" data-ja="第二の研究関心分野をここに追加してください。どんな疑問に魅了されていますか？どの知識の空白を埋めようとしていますか？">Add your second area of research interest here. What questions fascinate you? What gaps in knowledge are you trying to fill?</p>
-      <div class="research-status" style="color:#a78bfa;"><div class="status-dot" style="background:#a78bfa;"></div><span class="t-fade" data-en="Exploring possibilities" data-ja="可能性を探索中">Exploring possibilities</span></div>
-    </div>
-    <div class="research-card reveal">
-      <span class="research-tag t-fade" style="background:rgba(16,185,129,.1);color:#10b981;border-color:rgba(16,185,129,.2);" data-en="Complete" data-ja="完了">Complete</span>
-      <h3 class="t-fade" data-en="Past Research Work" data-ja="過去の研究">Past Research Work</h3>
-      <p class="t-fade" data-en="Describe any completed research, science fair projects, or independent studies you've done. What did you find?" data-ja="完了した研究、科学フェアプロジェクト、または独立した研究について説明してください。何を発見しましたか？">Describe any completed research, science fair projects, or independent studies you've done. What did you find?</p>
-      <div class="research-status" style="color:#10b981;"><div class="status-dot" style="background:#10b981;animation:none;opacity:.6;"></div><span class="t-fade" data-en="Completed" data-ja="完了">Completed</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="section-sep"></div>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="section-header reveal">
-    <span class="section-num">03</span>
-    <h2 class="section-title t-fade" data-en="Projects" data-ja="プロジェクト">Projects</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="projects-list reveal">
-    <div class="project-item">
-      <div class="project-num">001</div>
-      <div class="project-info">
-        <h3 class="t-fade" data-en="Project Alpha"        data-ja="プロジェクト アルファ">Project Alpha</h3>
-        <p  class="t-fade" data-en="Brief description of your project — what it does and why it matters." data-ja="プロジェクトの概要 — 何をするものか、なぜ重要なのか。">Brief description of your project — what it does and why it matters.</p>
-      </div>
-      <div class="project-tags"><span class="tag accent">Research</span><span class="tag">2024</span></div>
-    </div>
-    <div class="project-item">
-      <div class="project-num">002</div>
-      <div class="project-info">
-        <h3 class="t-fade" data-en="Community Initiative" data-ja="コミュニティ活動">Community Initiative</h3>
-        <p  class="t-fade" data-en="Describe a project or initiative you launched to give back to your community." data-ja="コミュニティに還元するために立ち上げたプロジェクトや取り組み。">Describe a project or initiative you launched to give back to your community.</p>
-      </div>
-      <div class="project-tags"><span class="tag accent">Impact</span><span class="tag">2024</span></div>
-    </div>
-    <div class="project-item">
-      <div class="project-num">003</div>
-      <div class="project-info">
-        <h3 class="t-fade" data-en="Entrepreneurship Venture" data-ja="起業家的取り組み">Entrepreneurship Venture</h3>
-        <p  class="t-fade" data-en="Any startup idea, small business, or entrepreneurial project you've undertaken." data-ja="取り組んだスタートアップのアイデア、小規模ビジネス、起業家プロジェクト。">Any startup idea, small business, or entrepreneurial project you've undertaken.</p>
-      </div>
-      <div class="project-tags"><span class="tag accent">Startup</span><span class="tag">2025</span></div>
-    </div>
-    <div class="project-item">
-      <div class="project-num">004</div>
-      <div class="project-info">
-        <h3 class="t-fade" data-en="Collaborative Project" data-ja="共同プロジェクト">Collaborative Project</h3>
-        <p  class="t-fade" data-en="A team project, school collaboration, or group research effort." data-ja="チームプロジェクト、学校での共同作業、またはグループ研究活動。">A team project, school collaboration, or group research effort.</p>
-      </div>
-      <div class="project-tags"><span class="tag">Collab</span><span class="tag">2025</span></div>
     </div>
   </div>
 </section>
@@ -362,27 +274,27 @@
 <section id="news">
   <div class="section-header reveal">
     <span class="section-num">04</span>
-    <h2 class="section-title t-fade" data-en="News" data-ja="ニュース">News</h2>
+    <h2 class="section-title t-fade" data-ja="ニュース" data-en="News">ニュース</h2>
     <div class="section-line"></div>
   </div>
   <div class="news-grid">
     <div class="news-card reveal">
-      <span class="news-chip chip-research t-fade" data-en="Research" data-ja="研究">Research</span>
+      <span class="news-chip chip-research t-fade" data-ja="研究" data-en="Research">研究</span>
       <div class="news-date">APR 2026</div>
-      <h3 class="t-fade" data-en="New Research Phase Begins"     data-ja="新しい研究フェーズ開始">New Research Phase Begins</h3>
-      <p  class="t-fade" data-en="Update this with your latest news — a new project launch, publication, or breakthrough moment." data-ja="最新ニュースに更新してください — 新プロジェクト開始、論文発表、ブレークスルーなど。">Update this with your latest news — a new project launch, publication, or breakthrough moment.</p>
+      <h3 class="t-fade" data-ja="新しい研究フェーズ開始" data-en="New Research Phase Begins">新しい研究フェーズ開始</h3>
+      <p  class="t-fade" data-ja="最新ニュースに更新してください — 新プロジェクト開始、論文発表、ブレークスルーなど。" data-en="Update this with your latest news — a new project launch, publication, or breakthrough moment.">最新ニュースに更新してください — 新プロジェクト開始、論文発表、ブレークスルーなど。</p>
     </div>
     <div class="news-card reveal">
-      <span class="news-chip chip-award t-fade" data-en="Achievement" data-ja="実績">Achievement</span>
+      <span class="news-chip chip-award t-fade" data-ja="実績" data-en="Achievement">実績</span>
       <div class="news-date">MAR 2026</div>
-      <h3 class="t-fade" data-en="Recognition or Award Received" data-ja="表彰・受賞">Recognition or Award Received</h3>
-      <p  class="t-fade" data-en="Share any recent recognition, competition wins, or academic achievements you're proud of." data-ja="誇りに思う最近の表彰、コンペ優勝、または学術的実績をシェアしてください。">Share any recent recognition, competition wins, or academic achievements you're proud of.</p>
+      <h3 class="t-fade" data-ja="表彰・受賞" data-en="Recognition or Award Received">表彰・受賞</h3>
+      <p  class="t-fade" data-ja="誇りに思う最近の表彰、コンペ優勝、または学術的実績をシェアしてください。" data-en="Share any recent recognition, competition wins, or academic achievements you're proud of.">誇りに思う最近の表彰、コンペ優勝、または学術的実績をシェアしてください。</p>
     </div>
     <div class="news-card reveal">
-      <span class="news-chip chip-event t-fade" data-en="Event" data-ja="イベント">Event</span>
+      <span class="news-chip chip-event t-fade" data-ja="イベント" data-en="Event">イベント</span>
       <div class="news-date">FEB 2026</div>
-      <h3 class="t-fade" data-en="Conference / Presentation"     data-ja="学会・発表">Conference / Presentation</h3>
-      <p  class="t-fade" data-en="Did you present at an event, join a summit, or participate in a program? Share it here." data-ja="イベントで発表したり、サミットに参加したりしましたか？ここでシェアしてください。">Did you present at an event, join a summit, or participate in a program? Share it here.</p>
+      <h3 class="t-fade" data-ja="学会・発表" data-en="Conference / Presentation">学会・発表</h3>
+      <p  class="t-fade" data-ja="イベントで発表したり、サミットに参加したりしましたか？ここでシェアしてください。" data-en="Did you present at an event, join a summit, or participate in a program? Share it here.">イベントで発表したり、サミットに参加したりしましたか？ここでシェアしてください。</p>
     </div>
   </div>
 </section>
@@ -393,33 +305,33 @@
 <section id="activities">
   <div class="section-header reveal">
     <span class="section-num">05</span>
-    <h2 class="section-title t-fade" data-en="Activities" data-ja="活動">Activities</h2>
+    <h2 class="section-title t-fade" data-ja="活動" data-en="Activities">活動</h2>
     <div class="section-line"></div>
   </div>
   <div class="activities-timeline reveal">
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date t-fade" data-en="2025 – PRESENT" data-ja="2025年 – 現在">2025 – PRESENT</div>
-      <h3 class="t-fade" data-en="Research Club / Science Society"      data-ja="研究クラブ・科学部">Research Club / Science Society</h3>
-      <p  class="t-fade" data-en="Describe your role and contributions in any school clubs, societies, or research groups." data-ja="学校のクラブ、学会、または研究グループでの役割と貢献を説明してください。">Describe your role and contributions in any school clubs, societies, or research groups.</p>
+      <div class="activity-date t-fade" data-ja="2025年 – 現在" data-en="2025 – PRESENT">2025年 – 現在</div>
+      <h3 class="t-fade" data-ja="研究クラブ・科学部" data-en="Research Club / Science Society">研究クラブ・科学部</h3>
+      <p  class="t-fade" data-ja="学校のクラブ、学会、または研究グループでの役割と貢献を説明してください。" data-en="Describe your role and contributions in any school clubs, societies, or research groups.">学校のクラブ、学会、または研究グループでの役割と貢献を説明してください。</p>
     </div>
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date t-fade" data-en="2024 – PRESENT" data-ja="2024年 – 現在">2024 – PRESENT</div>
-      <h3 class="t-fade" data-en="Entrepreneurship / Business Program" data-ja="起業家・ビジネスプログラム">Entrepreneurship / Business Program</h3>
-      <p  class="t-fade" data-en="Any startup programs, business competitions, or entrepreneurship courses you've joined." data-ja="参加したスタートアッププログラム、ビジネスコンペ、または起業家コース。">Any startup programs, business competitions, or entrepreneurship courses you've joined.</p>
+      <div class="activity-date t-fade" data-ja="2024年 – 現在" data-en="2024 – PRESENT">2024年 – 現在</div>
+      <h3 class="t-fade" data-ja="起業家・ビジネスプログラム" data-en="Entrepreneurship / Business Program">起業家・ビジネスプログラム</h3>
+      <p  class="t-fade" data-ja="参加したスタートアッププログラム、ビジネスコンペ、または起業家コース。" data-en="Any startup programs, business competitions, or entrepreneurship courses you've joined.">参加したスタートアッププログラム、ビジネスコンペ、または起業家コース。</p>
     </div>
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date t-fade" data-en="2024" data-ja="2024年">2024</div>
-      <h3 class="t-fade" data-en="Volunteer / Community Service"        data-ja="ボランティア・地域奉仕">Volunteer / Community Service</h3>
-      <p  class="t-fade" data-en="How do you give back to your community? Describe your volunteer work and service projects." data-ja="コミュニティにどう貢献していますか？ボランティア活動や奉仕プロジェクトを説明してください。">How do you give back to your community? Describe your volunteer work and service projects.</p>
+      <div class="activity-date t-fade" data-ja="2024年" data-en="2024">2024年</div>
+      <h3 class="t-fade" data-ja="ボランティア・地域奉仕" data-en="Volunteer / Community Service">ボランティア・地域奉仕</h3>
+      <p  class="t-fade" data-ja="コミュニティにどう貢献していますか？ボランティア活動や奉仕プロジェクトを説明してください。" data-en="How do you give back to your community? Describe your volunteer work and service projects.">コミュニティにどう貢献していますか？ボランティア活動や奉仕プロジェクトを説明してください。</p>
     </div>
     <div class="activity-item">
       <div class="activity-dot"></div>
-      <div class="activity-date t-fade" data-en="2023 – PRESENT" data-ja="2023年 – 現在">2023 – PRESENT</div>
-      <h3 class="t-fade" data-en="Other Extracurriculars"               data-ja="その他の課外活動">Other Extracurriculars</h3>
-      <p  class="t-fade" data-en="Sports, arts, music, debate — anything else that defines who you are beyond academics." data-ja="スポーツ、芸術、音楽、ディベート — 学業以外のあなたを定義するもの。">Sports, arts, music, debate — anything else that defines who you are beyond academics.</p>
+      <div class="activity-date t-fade" data-ja="2023年 – 現在" data-en="2023 – PRESENT">2023年 – 現在</div>
+      <h3 class="t-fade" data-ja="その他の課外活動" data-en="Other Extracurriculars">その他の課外活動</h3>
+      <p  class="t-fade" data-ja="スポーツ、芸術、音楽、ディベート — 学業以外のあなたを定義するもの。" data-en="Sports, arts, music, debate — anything else that defines who you are beyond academics.">スポーツ、芸術、音楽、ディベート — 学業以外のあなたを定義するもの。</p>
     </div>
   </div>
 </section>
@@ -430,34 +342,242 @@
 <section id="awards">
   <div class="section-header reveal">
     <span class="section-num">06</span>
-    <h2 class="section-title t-fade" data-en="Awards" data-ja="受賞歴">Awards</h2>
+    <h2 class="section-title t-fade" data-ja="受賞歴・実績" data-en="Awards & Achievements">受賞歴・実績</h2>
     <div class="section-line"></div>
   </div>
   <div class="awards-grid">
-    <div class="award-card reveal">
-      <span class="award-icon">🏆</span>
-      <h3 class="award-org t-fade" data-en="Award Name Here"       data-ja="受賞名">Award Name Here</h3>
-      <div class="award-org t-fade" data-en="Awarding Organization" data-ja="授与機関">Awarding Organization</div>
-      <div class="award-year">2025</div>
-    </div>
+
+    <!-- 1 -->
     <div class="award-card reveal">
       <span class="award-icon">🥇</span>
-      <h3 class="t-fade" data-en="Competition Winner"  data-ja="コンペ優勝">Competition Winner</h3>
-      <div class="award-org t-fade" data-en="Competition Name" data-ja="大会名">Competition Name</div>
-      <div class="award-year">2024</div>
+      <div class="award-year-badge">2026</div>
+      <h3 class="t-fade"
+        data-ja="第2回日本人工知能オリンピック — 金賞"
+        data-en="2nd Japan AI Olympics — Gold Award">第2回日本人工知能オリンピック — 金賞</h3>
+      <p class="award-desc t-fade"
+        data-ja=""
+        data-en=""></p>
     </div>
+
+    <!-- 2 -->
     <div class="award-card reveal">
-      <span class="award-icon">📜</span>
-      <h3 class="t-fade" data-en="Scholarship / Grant" data-ja="奨学金・助成金">Scholarship / Grant</h3>
-      <div class="award-org t-fade" data-en="Granting Institution" data-ja="授与機関">Granting Institution</div>
-      <div class="award-year">2024</div>
+      <span class="award-icon">🌏</span>
+      <div class="award-year-badge">2026</div>
+      <h3 class="t-fade"
+        data-ja="アジア太平洋人工知能オリンピック — 日本代表選抜"
+        data-en="Asia-Pacific AI Olympics — Japan National Representative">アジア太平洋人工知能オリンピック — 日本代表選抜</h3>
+      <p class="award-desc t-fade"
+        data-ja=""
+        data-en=""></p>
     </div>
+
+    <!-- 3 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🚀</span>
+      <div class="award-year-badge">2026</div>
+      <h3 class="t-fade"
+        data-ja="Conrad Challenge 2026 — イノベーターリスト"
+        data-en="Conrad Challenge 2026 — Innovator List">Conrad Challenge 2026 — イノベーターリスト</h3>
+      <p class="award-desc t-fade"
+        data-ja=""
+        data-en=""></p>
+    </div>
+
+    <!-- 4 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🏢</span>
+      <div class="award-year-badge">2026</div>
+      <h3 class="t-fade"
+        data-ja="第12回マイナビキャリア甲子園 — セミファイナリスト（全国3151チーム中72位・上位2%）"
+        data-en="12th Mynavi Career Koshien — Semi-Finalist (72nd out of 3,151 teams nationally, top 2%)">第12回マイナビキャリア甲子園 — セミファイナリスト（全国3151チーム中72位・上位2%）</h3>
+      <p class="award-desc t-fade"
+        data-ja="企業課題に対する新規事業提案を行う全国規模のビジネスコンテスト。"
+        data-en="A nationwide business contest where participants propose new business solutions to real corporate challenges.">企業課題に対する新規事業提案を行う全国規模のビジネスコンテスト。</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🏆</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="World Scholar's Cup Tournament of Champions at Yale University — チーム総合33位・チームボウル&チームディベート金メダル"
+        data-en="World Scholar's Cup Tournament of Champions at Yale University — Team Overall 33rd, Gold Medals in Team Bowl & Team Debate">World Scholar's Cup Tournament of Champions at Yale University — チーム総合33位・チームボウル&チームディベート金メダル</h3>
+      <p class="award-desc t-fade"
+        data-ja="各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。"
+        data-en="A comprehensive international competition where teams that won national qualifiers compete in debate, quiz bowls, and various other disciplines.">各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。</p>
+    </div>
+
+    <!-- 6 -->
     <div class="award-card reveal">
       <span class="award-icon">⭐</span>
-      <h3 class="t-fade" data-en="Academic Excellence" data-ja="学業優秀賞">Academic Excellence</h3>
-      <div class="award-org t-fade" data-en="Your School"         data-ja="学校名">Your School</div>
-      <div class="award-year">2023</div>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology 個人世界19位"
+        data-en="World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology Individual World 19th">World Scholar's Cup Tournament of Champions at Yale University — Science &amp; Technology 個人世界19位</h3>
+      <p class="award-desc t-fade"
+        data-ja="各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。"
+        data-en="A comprehensive international competition where teams that won national qualifiers compete in debate, quiz bowls, and various other disciplines.">各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。</p>
     </div>
+
+    <!-- 7 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🌟</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="World Scholar's Cup Kuala Lumpur Global Round — チーム総合25位・チームディベート/ボウル/ライティング/個人ディベート 全部門金メダル"
+        data-en="World Scholar's Cup Kuala Lumpur Global Round — Team Overall 25th, Gold Medals in Team Debate / Bowl / Writing &amp; Individual Debate">World Scholar's Cup Kuala Lumpur Global Round — チーム総合25位・チームディベート/ボウル/ライティング/個人ディベート 全部門金メダル</h3>
+      <p class="award-desc t-fade"
+        data-ja="各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。"
+        data-en="A comprehensive international competition where teams that won national qualifiers compete in debate, quiz bowls, and various other disciplines.">各国予選を勝ち抜いたチームとディベートやクイズ大会など様々な分野で競う総合的な国際大会。</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="award-card reveal">
+      <span class="award-icon">✈️</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="FedEx / Junior Achievement International Trade Challenge アジア太平洋大会 — 日本代表として出場"
+        data-en="FedEx / Junior Achievement International Trade Challenge Asia-Pacific — Japan National Representative">FedEx / Junior Achievement International Trade Challenge アジア太平洋大会 — 日本代表として出場</h3>
+      <p class="award-desc t-fade"
+        data-ja="各国予選を勝ち抜き代表となった人が出場する英語による国際ビジネス提案コンテスト。"
+        data-en="An English-language international business proposal contest open to national representatives who won their respective qualifiers.">各国予選を勝ち抜き代表となった人が出場する英語による国際ビジネス提案コンテスト。</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🥈</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="FedEx / Junior Achievement International Trade Challenge 日本大会 — 全国2位・アジア太平洋大会 日本代表"
+        data-en="FedEx / Junior Achievement International Trade Challenge Japan — 2nd Place Nationally, Japan Representative for Asia-Pacific">FedEx / Junior Achievement International Trade Challenge 日本大会 — 全国2位・アジア太平洋大会 日本代表</h3>
+      <p class="award-desc t-fade"
+        data-ja="約130チームが参加した英語による国際ビジネス提案コンテスト。"
+        data-en="An English-language international business proposal contest with approximately 130 participating teams.">約130チームが参加した英語による国際ビジネス提案コンテスト。</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🎖️</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="World Scholar's Cup Tokyo Regional Round — チーム総合4位・チームディベート2位・チームライティング4位"
+        data-en="World Scholar's Cup Tokyo Regional Round — Team Overall 4th, Team Debate 2nd, Team Writing 4th">World Scholar's Cup Tokyo Regional Round — チーム総合4位・チームディベート2位・チームライティング4位</h3>
+      <p class="award-desc t-fade"
+        data-ja="チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。"
+        data-en="A nationwide qualifying round of a comprehensive competition in which teams compete in debate, quiz bowls, and other disciplines.">チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🏅</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="World Scholar's Cup Tokyo Regional Round — 個人総合4位・個人ディベート2位・全5科目＋特別分野すべて金メダル"
+        data-en="World Scholar's Cup Tokyo Regional Round — Individual Overall 4th, Individual Debate 2nd, Gold Medals in All 5 Subjects &amp; Special Area">World Scholar's Cup Tokyo Regional Round — 個人総合4位・個人ディベート2位・全5科目＋特別分野すべて金メダル</h3>
+      <p class="award-desc t-fade"
+        data-ja="チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。"
+        data-en="A nationwide qualifying round of a comprehensive competition in which teams compete in debate, quiz bowls, and other disciplines.">チームとディベートやクイズ大会など様々な分野で競う総合的な大会の全国規模の予選大会。</p>
+    </div>
+
+    <!-- 12 -->
+    <div class="award-card reveal">
+      <span class="award-icon">🎤</span>
+      <div class="award-year-badge">2025</div>
+      <h3 class="t-fade"
+        data-ja="第7回日本中学生パーラメンタリーディベート大会 — 13th Best Speaker"
+        data-en="7th Japan Junior High School Parliamentary Debate Championship — 13th Best Speaker">第7回日本中学生パーラメンタリーディベート大会 — 13th Best Speaker</h3>
+      <p class="award-desc t-fade"
+        data-ja="全国規模の英語ディベート大会。"
+        data-en="A nationwide English debate competition.">全国規模の英語ディベート大会。</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- QUALIFICATIONS & MEMBERSHIPS -->
+<section id="quals">
+  <div class="section-header reveal">
+    <span class="section-num">07</span>
+    <h2 class="section-title t-fade" data-ja="資格・所属・研究実績" data-en="Qualifications, Memberships & Research">資格・所属・研究実績</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="qual-grid">
+
+    <!-- Memberships -->
+    <div class="qual-card reveal">
+      <span class="qual-icon">🎓</span>
+      <h3 class="t-fade"
+        data-ja="The Junior Academy at The New York Academy of Sciences — メンバー"
+        data-en="The Junior Academy at The New York Academy of Sciences — Member">The Junior Academy at The New York Academy of Sciences — メンバー</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">🤝</span>
+      <h3 class="t-fade"
+        data-ja="Junior Achievement Japan Alumni Network — メンバー"
+        data-en="Junior Achievement Japan Alumni Network — Member">Junior Achievement Japan Alumni Network — メンバー</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">🌐</span>
+      <h3 class="t-fake"
+        data-ja="Junior Achievement Asia Pacific Alumni Network — メンバー"
+        data-en="Junior Achievement Asia Pacific Alumni Network — Member">Junior Achievement Asia Pacific Alumni Network — メンバー</h3>
+    </div>
+
+    <!-- Qualifications -->
+    <div class="qual-card reveal">
+      <span class="qual-icon">📜</span>
+      <h3 class="t-fade"
+        data-ja="英検一級 合格（2023年）"
+        data-en="EIKEN Grade 1 (Passed, 2023)">英検一級 合格（2023年）</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">📊</span>
+      <h3 class="t-fade"
+        data-ja="TOEFL 107点 取得（2023年）"
+        data-en="TOEFL Score 107 (2023)">TOEFL 107点 取得（2023年）</h3>
+    </div>
+
+    <!-- Research achievements -->
+    <div class="qual-card reveal">
+      <span class="qual-icon">🔬</span>
+      <h3 class="t-fade"
+        data-ja="つくばScience Edge Science Idea Contest — ブースポスタープレゼンテーション採択（2026年）"
+        data-en="Tsukuba Science Edge Science Idea Contest — Poster Presentation Selected (2026)">つくばScience Edge Science Idea Contest — ブースポスタープレゼンテーション採択（2026年）</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">💻</span>
+      <h3 class="t-fade"
+        data-ja="国立情報学研究所 情報科学の達人プログラム 7期生 採択（2026年）"
+        data-en="NII (National Institute of Informatics) Jouhou Kagaku no Tatsujin Program — 7th Cohort Selected (2026)">国立情報学研究所 情報科学の達人プログラム 7期生 採択（2026年）</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">⚡</span>
+      <h3 class="t-fade"
+        data-ja="電気学会 U-21 学生研究発表会 — 口頭発表・佳作受賞（2026年）"
+        data-en="IEEJ (Institute of Electrical Engineers of Japan) U-21 Student Research Presentation — Oral Presentation, Honorable Mention (2026)">電気学会 U-21 学生研究発表会 — 口頭発表・佳作受賞（2026年）</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">🌱</span>
+      <h3 class="t-fade"
+        data-ja="第10回サステナブル・ブランド国際会議2026 東京・丸の内 — 口頭発表（2026年）"
+        data-en="10th Sustainable Brands International Conference 2026 Tokyo Marunouchi — Oral Presentation (2026)">第10回サステナブル・ブランド国際会議2026 東京・丸の内 — 口頭発表（2026年）</h3>
+    </div>
+
+    <div class="qual-card reveal">
+      <span class="qual-icon">🧬</span>
+      <h3 class="t-fade"
+        data-ja="IHRP 全国高校生異分野融合型研究プログラム — 採択（2025年）"
+        data-en="IHRP National High School Interdisciplinary Research Program — Selected (2025)">IHRP 全国高校生異分野融合型研究プログラム — 採択（2025年）</h3>
+    </div>
+
   </div>
 </section>
 
@@ -466,17 +586,17 @@
 <!-- CONTACT -->
 <section id="contact">
   <div class="section-header reveal">
-    <span class="section-num">07</span>
-    <h2 class="section-title t-fade" data-en="Contact" data-ja="お問合せ">Contact</h2>
+    <span class="section-num">08</span>
+    <h2 class="section-title t-fade" data-ja="お問合せ" data-en="Contact">お問合せ</h2>
     <div class="section-line"></div>
   </div>
   <div class="contact-grid">
     <div class="contact-info reveal">
-      <h3 class="t-fade" data-en="Let's connect." data-ja="繋がりましょう。">Let's connect.</h3>
+      <h3 class="t-fade" data-ja="繋がりましょう。" data-en="Let's connect.">繋がりましょう。</h3>
       <p class="t-fade"
-        data-en="Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you."
-        data-ja="研究仲間、潜在的な協力者、メンター、または私の研究に興味がある方 — ぜひご連絡ください。">
-        Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you.
+        data-ja="研究仲間、潜在的な協力者、メンター、または私の研究に興味がある方 — ぜひご連絡ください。"
+        data-en="Whether you're a fellow researcher, potential collaborator, mentor, or just curious about my work — I'd love to hear from you.">
+        研究仲間、潜在的な協力者、メンター、または私の研究に興味がある方 — ぜひご連絡ください。
       </p>
       <div class="contact-links">
         <a href="mailto:your@email.com" class="contact-link"><span class="contact-link-icon">✉</span>your@email.com</a>
@@ -487,22 +607,22 @@
     </div>
     <form class="contact-form reveal" onsubmit="handleSubmit(event)">
       <div class="form-field">
-        <label class="t-fade" data-en="Name"    data-ja="お名前">Name</label>
-        <input type="text"  id="inp-name"  placeholder="Your name" required>
+        <label class="t-fade" data-ja="お名前"        data-en="Name">お名前</label>
+        <input type="text"  id="inp-name"  placeholder="お名前" required>
       </div>
       <div class="form-field">
-        <label class="t-fade" data-en="Email"   data-ja="メールアドレス">Email</label>
+        <label class="t-fade" data-ja="メールアドレス" data-en="Email">メールアドレス</label>
         <input type="email" id="inp-email" placeholder="your@email.com" required>
       </div>
       <div class="form-field">
-        <label class="t-fade" data-en="Message" data-ja="メッセージ">Message</label>
-        <textarea rows="5"  id="inp-msg"   placeholder="Tell me about yourself or your idea..." required></textarea>
+        <label class="t-fade" data-ja="メッセージ"    data-en="Message">メッセージ</label>
+        <textarea rows="5"  id="inp-msg"   placeholder="あなたや、あなたのアイデアについて教えてください..." required></textarea>
       </div>
-      <button type="submit" class="form-submit t-fade" data-en="Send Message →" data-ja="送信する →">Send Message →</button>
+      <button type="submit" class="form-submit t-fade" data-ja="送信する →" data-en="Send Message →">送信する →</button>
       <p id="form-success" style="font-family:var(--mono);font-size:.7rem;color:var(--accent3);display:none;" class="t-fade"
-        data-en="✓ Message sent! I'll get back to you soon."
-        data-ja="✓ 送信完了！近日中にご返信いたします。">
-        ✓ Message sent! I'll get back to you soon.
+        data-ja="✓ 送信完了！近日中にご返信いたします。"
+        data-en="✓ Message sent! I'll get back to you soon.">
+        ✓ 送信完了！近日中にご返信いたします。
       </p>
     </form>
   </div>
@@ -510,19 +630,21 @@
 
 <footer>
   <span>© 2026 早川友治 · Tomoharu Hayakawa</span>
-  <span id="footer-back" class="t-fade" data-en="Built with purpose. <a href='#hero'>↑ Back to top</a>" data-ja="目的を持って構築。<a href='#hero'>↑ トップへ</a>">Built with purpose. <a href="#hero">↑ Back to top</a></span>
+  <span id="footer-back" class="t-fade"
+    data-ja="目的を持って構築。<a href='#hero'>↑ トップへ</a>"
+    data-en="Built with purpose. <a href='#hero'>↑ Back to top</a>">目的を持って構築。<a href="#hero">↑ トップへ</a></span>
 </footer>
 
 <script>
-// ── LANGUAGE ──
-let currentLang = 'en';
+// ── LANGUAGE (default: ja) ──
+let currentLang = 'ja';
 const phrases = {
-  en: ['High school researcher.','Aspiring entrepreneur.','Building the future.','Research → Community impact.','Curiosity-driven. Action-focused.'],
-  ja: ['高校生研究者。','将来の起業家。','未来を構築中。','研究 → 地域社会への貢献。','好奇心主導。行動重視。']
+  ja: ['高校生研究者。','将来の起業家。','未来を構築中。','研究 → 地域社会への貢献。','好奇心主導。行動重視。'],
+  en: ['High school researcher.','Aspiring entrepreneur.','Building the future.','Research → Community impact.','Curiosity-driven. Action-focused.']
 };
 const placeholders = {
-  en: {name:'Your name', email:'your@email.com', msg:'Tell me about yourself or your idea...'},
-  ja: {name:'お名前',    email:'your@email.com', msg:'あなたや、あなたのアイデアについて教えてください...'}
+  ja: {name:'お名前', email:'your@email.com', msg:'あなたや、あなたのアイデアについて教えてください...'},
+  en: {name:'Your name', email:'your@email.com', msg:'Tell me about yourself or your idea...'}
 };
 
 function setLang(lang) {
@@ -532,7 +654,7 @@ function setLang(lang) {
   setTimeout(() => {
     document.querySelectorAll('[data-' + lang + ']').forEach(el => {
       const val = el.getAttribute('data-' + lang);
-      // Use innerHTML for elements that may contain HTML tags
+      if (!val && val !== '') return;
       if (el.classList.contains('vision-text') || el.id === 'footer-back') {
         el.innerHTML = val;
       } else {
@@ -545,7 +667,7 @@ function setLang(lang) {
     document.getElementById('inp-msg').placeholder   = p.msg;
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
-    document.body.classList.toggle('lang-ja', lang === 'ja');
+    document.body.classList.toggle('lang-en', lang === 'en');
     document.documentElement.lang = lang;
     // Restart typing
     pIdx = 0; cIdx = 0; deleting = false;
@@ -562,7 +684,7 @@ const ring   = document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
 (function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
-document.querySelectorAll('a,button,.research-card,.project-item,.award-card,.news-card').forEach(el=>{
+document.querySelectorAll('a,button,.research-card,.project-item,.award-card,.news-card,.qual-card').forEach(el=>{
   el.addEventListener('mouseenter',()=>{ cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='50px'; ring.style.height='50px'; });
   el.addEventListener('mouseleave',()=>{ cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
 });
