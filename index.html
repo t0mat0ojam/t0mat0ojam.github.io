@@ -3,237 +3,258 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Tomoharu Hayakawa — machine learning, embedded systems, electrical engineering, physics. Tokyo.">
 <title>Tomoharu Hayakawa</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<meta name="description" content="Researching compression methods for biosignal decoders and building low-cost embedded systems. I want assistive and rehab devices to reach people recovering from strokes and other neurological injuries. Also interested in AI safety.">
+<meta property="og:title" content="Tomoharu Hayakawa">
+<meta property="og:description" content="Researching compression methods for biosignal decoders and building low-cost embedded systems. I want assistive and rehab devices to reach people recovering from strokes and other neurological injuries. Also interested in AI safety.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://t0mat0ojam.github.io/">
+<meta property="og:image" content="https://t0mat0ojam.github.io/img/portrait.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;1,400&family=Syne:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
-/* Layout: one narrow column, no boxes. The only picture is a small gradient-descent animation beside the name. */
+/* Notebook: one narrow column, no boxes. The one picture is an annealing field beside the name. */
 :root {
   --bg: #fbfbf9;
   --fg: #171a1f;
-  --muted: #6b7280;
+  --muted: #5f6672;
   --line: #e4e5e1;
   --accent: #2456d8;
+  --chip: #e8eefc;
   --font-display: "Syne", "Zen Kaku Gothic New", system-ui, sans-serif;
   --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --font-math: "STIX Two Text", "Cambria Math", "Times New Roman", serif;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --bg: #101215; --fg: #ecedea; --muted: #8f96a0; --line: #272a30; --accent: #7ea2ff; color-scheme: dark; }
+  :root:not([data-theme="light"]) { --bg: #101215; --fg: #ecedea; --muted: #9aa1ab; --line: #272a30; --accent: #7ea2ff; --chip: #1b2440; color-scheme: dark; }
 }
-:root[data-theme="dark"] { --bg: #101215; --fg: #ecedea; --muted: #8f96a0; --line: #272a30; --accent: #7ea2ff; color-scheme: dark; }
+:root[data-theme="dark"] { --bg: #101215; --fg: #ecedea; --muted: #9aa1ab; --line: #272a30; --accent: #7ea2ff; --chip: #1b2440; color-scheme: dark; }
 
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.75; }
-.wrap { max-width: 620px; margin: 0 auto; padding-block: 64px 80px; padding-inline: 20px; }
+.wrap { max-width: 660px; margin: 0 auto; padding-block: 64px 80px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
 a:hover { text-decoration-color: var(--accent); color: var(--accent); }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+img { max-width: 100%; display: block; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
 
 header { display: flex; align-items: center; gap: 28px; }
-canvas { width: 168px; height: 168px; flex: 0 0 168px; border-radius: 50%; display: block; }
+.anneal { flex: 0 0 168px; width: 168px; height: 168px; padding: 0; border: 0; background: none; border-radius: 50%; cursor: pointer; }
+.anneal:focus-visible { outline-offset: 4px; border-radius: 50%; }
+.anneal canvas { width: 168px; height: 168px; display: block; border-radius: 50%; }
 .who { min-width: 0; }
-h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 7vw, 2.75rem); line-height: 1; letter-spacing: -0.03em; margin: 0 0 10px; text-wrap: balance; }
-.tagline { margin: 0; color: var(--muted); font-size: 0.98rem; text-wrap: pretty; }
-.links { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.92rem; }
-@media (max-width: 520px) { header { flex-direction: column; align-items: flex-start; gap: 20px; } canvas { width: 140px; height: 140px; flex-basis: auto; } }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 7vw, 2.75rem); line-height: 1; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+.jp { margin: 8px 0 0; color: var(--muted); font-size: 0.95rem; letter-spacing: 0.08em; }
+.links { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.92rem; }
+@media (max-width: 540px) { header { flex-direction: column; align-items: flex-start; gap: 20px; } }
 
-section { margin-top: 56px; }
-h2 { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
-p { margin: 0; }
-p + p { margin-top: 12px; }
-ul { margin: 0; padding: 0; list-style: none; }
-li { padding: 10px 0; border-top: 1px solid var(--line); }
-li:last-child { border-bottom: 1px solid var(--line); }
-li b { font-weight: 700; }
-li span { color: var(--muted); }
-li small { display: block; color: var(--muted); font-size: 0.9rem; }
-li[hidden] { display: none; }
+.eq { margin: 18px 0 0; padding: 12px 0 0; border-top: 1px dashed var(--line); }
+.formula { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 16px; font-family: var(--font-math); font-size: 1.05rem; color: var(--fg); }
+.formula i { font-style: italic; }
+.rad { border-top: 1px solid currentColor; padding: 0 2px; margin-left: 1px; }
+.temp { color: var(--accent); font-variant-numeric: tabular-nums; }
+.temp output { font-family: var(--font-math); }
+.eq figcaption { margin-top: 4px; font-size: 0.82rem; line-height: 1.6; color: var(--muted); max-width: 60ch; }
+
+.thesis { margin-top: 40px; font-size: 1.22rem; line-height: 1.6; text-wrap: pretty; }
+.sub { margin-top: 14px; color: var(--muted); }
+
+section { margin-top: 60px; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em; margin: 0 0 14px; }
+
+.entries > li { padding: 16px 0; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.entries > li:last-child { border-bottom: 1px solid var(--line); }
+.entry-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.entry-head b { font-weight: 700; font-size: 1.05rem; }
+.meta { color: var(--muted); font-size: 0.9rem; }
+.status { font-size: 0.78rem; font-weight: 700; padding: 1px 10px; border-radius: 999px; background: var(--chip); color: var(--accent); white-space: nowrap; }
+.status.next { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+
+.photos { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; margin: 0 0 20px; }
+.photos figure { margin: 0; min-width: 0; }
+.photos img { width: 100%; height: 260px; object-fit: cover; border-radius: 6px; }
+.photos img.tall { object-position: 50% 30%; }
+.photos figcaption { font-size: 0.82rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+@media (max-width: 540px) { .photos { grid-template-columns: 1fr; } .photos img { height: 220px; } }
+
+.awards li { padding: 9px 0; border-top: 1px solid var(--line); }
+.awards li:last-child { border-bottom: 1px solid var(--line); }
+.awards .dot, .awards .detail { color: var(--muted); }
 .more { font: inherit; font-size: 0.9rem; background: none; border: none; padding: 12px 0 0; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+
+.contact { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 20px; align-items: start; }
+.contact img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; }
+.open { margin-top: 8px; }
+.open li { padding-left: 18px; position: relative; }
+.open li::before { content: ""; position: absolute; left: 2px; top: 0.75em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.email { margin-top: 14px; font-weight: 700; user-select: all; overflow-wrap: anywhere; }
+@media (max-width: 540px) { .contact { grid-template-columns: 1fr; } }
+
 footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 4px 20px; }
+
+[hidden] { display: none !important; }
 </style>
 </head>
 <body>
-
 <div class="wrap">
-  <header>
-    <canvas id="gd" width="168" height="168" aria-label="Animation of gradient descent finding the bottom of a loss surface"></canvas>
-    <div class="who">
-      <h1>Tomoharu Hayakawa</h1>
-      <p class="tagline">Machine learning, embedded systems, electrical engineering and quantum physics. I want to leave an impact by building cool stuff and helping people. Tokyo.</p>
-      <ul class="links">
-        <li style="border:0;padding:0"><a href="https://www.linkedin.com/in/tomoharu-hayakawa-880116379/">LinkedIn</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <section>
-    <h2>Now</h2>
-    <p>Compressing neural networks so brain–computer interfaces can run on cheap, low-power hardware, and trying to get that work published.</p>
-    <p>Building GraphRAG knowledge bases for LLMs in sports-injury prevention. Reading quantum physics. Playing and coaching tennis.</p>
-  </section>
-
-  <section>
-    <h2>Experience</h2>
-    <ul>
-      <li><b>Researcher, Embedded Systems</b> <span>· National Institute of Informatics</span><small>Neural-network compression for brain–computer interfaces, with Assoc. Prof. Mahito Sugiyama. National funding; preparing for publication.</small></li>
-      <li><b>LLM Open Researcher</b> <span>· University of Tokyo Matsuo–Iwasawa Lab</span><small>GraphRAG for sports-injury prevention. Work in progress, with compute funding.</small></li>
-      <li><b>Researcher, Sports Injury Prevention</b> <span>· IHRP</span><small>Error propagation in AI pose estimation. Two international conferences (one as invited speaker) and one national.</small></li>
-      <li><b>Selected Participant</b> <span>· Suri no Tsubasa Summer Seminar</span><small>Seminar founded by Fields Medalist Heisuke Hironaka. One of ~40 students nationwide; presented on AI in scientific discovery.</small></li>
-      <li><b>Tennis Captain &amp; Coach</b> <span>· Hiroo Gakuen Tennis Club</span><small>Led a 60-member club to its first team prefectural tournament; qualified in singles and doubles. Still playing competitively and coaching younger players. Big fan of Kei Nishikori and Rei Sakamoto.</small></li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Recognitions</h2>
-    <ul id="awards">
-      <li><b>優秀賞</b>, 第20回高校生理科研究発表会 <span>· Chiba University</span></li>
-      <li><b>Bronze Medal</b>, Asia-Pacific Olympiad in AI 2026 <span>· Japan national team</span></li>
-      <li><b>Gold Medal</b>, Japan Olympiad in AI 2026 <span>· national IOAI selection</span></li>
-      <li><b>3rd Place</b>, STEM Racing Japan National Finals <span>· Professional Class</span></li>
-      <li><b>3rd Place</b>, GLOBAL TECH Japan National Finals <span>· MIT Beaver Works</span></li>
-      <li hidden><b>2nd Place</b>, IYNA / Alzheimer's Association Ideathon <span>· HS division, international</span></li>
-      <li hidden><b>Finalist</b>, All Japan AI Hackathon <span>· youngest team to reach the national finals</span></li>
-      <li hidden><b>Special Award</b>, Global Enterprise Challenge <span>· Japan round</span></li>
-      <li hidden><b>Conrad Innovator</b>, Conrad Challenge <span>· Equinor category</span></li>
-      <li hidden><b>Honorable Mention</b>, U-21 Research Conference, IEEJ</li>
-      <li hidden><b>Semifinalist</b>, Mynavi Career Koshien <span>· 72 of 3,151 entries</span></li>
-      <li hidden><b>Honorable Mention</b>, Japanese Olympiad in Informatics <span>· qualifying round</span></li>
-      <li hidden><b>33rd</b>, World Scholar's Cup Tournament of Champions, Yale <span>· 3 gold medals</span></li>
-      <li hidden><b>25th</b>, World Scholar's Cup Global Round, Kuala Lumpur <span>· 4 gold medals</span></li>
-      <li hidden><b>4th</b>, World Scholar's Cup Tokyo Regional <span>· gold in all 5 subjects</span></li>
-      <li hidden><b>Selected to represent Japan</b>, FedEx/JA International Trade Challenge <span>· Asia-Pacific Finals</span></li>
-      <li hidden><b>2nd Place</b>, FedEx/JA International Trade Challenge <span>· Japan National Finals</span></li>
-      <li hidden><b>13th Best Speaker</b>, Japan Junior High Parliamentary Debate Tournament</li>
-    </ul>
-    <button class="more" id="moreBtn" type="button" aria-expanded="false">Show all 18</button>
-  </section>
-
-  <footer>
-    <span>Hiroo Gakuen International</span>
-    <span>Tokyo, Japan</span>
-    <span>Updated Sep 2026</span>
-  </footer>
+<header><button class="anneal" id="anneal" type="button" aria-label="Reheat the particles"><canvas id="field" width="168" height="168"></canvas></button><div class="who"><h1>Tomoharu Hayakawa</h1><p class="jp"><span lang="ja">早川 智晴</span><span aria-hidden="true">　</span><span>東京</span></p><ul class="links"><li><a href="#contact">Email</a></li><li><a href="https://github.com/t0mat0ojam" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.linkedin.com/in/tomoharu-hayakawa-880116379/" target="_blank" rel="noopener">LinkedIn</a></li></ul></div></header><figure class="eq"><p class="formula"><span class="math"><i>x</i> ← <i>x</i> − <i>η</i>∇<i>E</i>(<i>x</i>) + √<span class="rad">2<i>ηT</i></span> <i>ξ</i></span><span class="temp"><i>T</i> = <output id="temp">1.00</output></span></p><figcaption>Each dot follows gradient descent plus thermal noise, which is Langevin dynamics. As the temperature cools, most settle into the deepest valley. This is simulated annealing. Tap the circle to reheat.</figcaption></figure><p class="thesis">Researching compression methods for biosignal decoders and building low-cost embedded systems. I want assistive and rehab devices to reach people recovering from strokes and other neurological injuries. Also interested in AI safety.</p><p class="sub">Researcher @ National Institute of Informatics and the University of Tokyo&#39;s Matsuo–Iwasawa Lab.</p><section><h2>What I&#39;m building</h2><ul class="entries"><li><div class="entry-head"><b>Low-cost EMG controller</b><span class="status">Prototyping</span></div><p>Reads muscle signals from surface electrodes and turns them into commands for assistive devices such as exoskeletons. Designed around parts a clinic or a student can afford.</p><p class="meta">Applying for grant funding</p></li><li><div class="entry-head"><b>prunecal</b><span class="status">Under review</span></div><p>Open-source Python package that combines structured pruning with label-free batch-norm recalibration. Deployed so EEG decoders and other bio-signal decoders can run on low cost devices.</p><p class="meta">With Assoc. Prof. Mahito Sugiyama, National Institute of Informatics. Funded by JST&#39;s STELLA program.</p></li></ul></section><section><h2>Research and talks</h2><div class="photos"><figure><img src="img/stage.jpg" alt="Tomoharu and four other IHRP researchers on stage at Sustainable Brands 2026 Tokyo Marunouchi" loading="lazy"><figcaption>Presenting IHRP research at Sustainable Brands 2026 Tokyo Marunouchi</figcaption></figure><figure><img src="img/poster.jpg" alt="Tomoharu standing beside his poster on error propagation in markerless motion capture" loading="lazy" class="tall"><figcaption>Poster on error propagation in markerless motion capture</figcaption></figure></div><ul class="entries"><li><div class="entry-head"><b>Error propagation in AI pose estimation</b><span class="meta">IHRP</span></div><p>Monte Carlo study of how measurement error in markerless motion capture changes injury-risk calls. Presented at two international conferences, one as an invited speaker, and one national.</p></li><li><div class="entry-head"><b>GraphRAG for sports-injury prevention</b><span class="meta">University of Tokyo Matsuo–Iwasawa Lab</span></div><p>Comparing a Neo4j knowledge graph against plain RAG and LLM-only answers.</p></li><li><div class="entry-head"><b>Suri no Tsubasa Summer Seminar</b><span class="meta">Founded by Fields Medalist Heisuke Hironaka</span></div><p>One of about 40 students selected nationwide for a rigorous math camp started by the Fields Medalist Professor Hironaka Heisuke; did a presentation on AI&#39;s role in scientific discovery.</p></li></ul></section><section><h2>Other Projects</h2><ul class="entries"><li><div class="entry-head"><b>AI workflow tools</b><span class="meta">Bak Corp, research and software intern</span></div><p>Software for enterprise clients&#39; workflows, and tooling for building energy functions for quantum-annealing optimization.</p></li><li><div class="entry-head"><b>eNavi</b><span class="meta">Founder</span></div><p>Building an organization that provides free, no-experience-needed electronics events and hackathons for junior-high and high-school students across Japan, with support from companies and institutions.</p></li></ul></section><section><h2>Recognition</h2><ul class="awards" id="awards"><li><b>Bronze Medal</b><span class="comma">, </span><span class="event">Asia-Pacific Olympiad in AI 2026</span><span class="dot"> · </span><span class="detail">Japan national team, 129 students from 18 nations</span></li><li><b>Gold Medal</b><span class="comma">, </span><span class="event">Japan Olympiad in AI</span><span class="dot"> · </span><span class="detail">national selection for IOAI</span></li><li><b>3rd Place</b><span class="comma">, </span><span class="event">STEM Racing Japan National Finals</span><span class="dot"> · </span><span class="detail">Professional Class</span></li><li><b>3rd Place</b><span class="comma">, </span><span class="event">GLOBAL TECH Japan National Finals</span><span class="dot"> · </span><span class="detail">MIT Beaver Works</span></li><li><b>2nd Place</b><span class="comma">, </span><span class="event">IYNA × Alzheimer&#39;s Association Ideathon</span><span class="dot"> · </span><span class="detail">international, high-school division</span></li><li><b>Excellence Award</b><span class="comma">, </span><span class="event">20th High School Science Research Conference</span><span class="dot"> · </span><span class="detail">Chiba University</span></li><li hidden><b>Finalist</b><span class="comma">, </span><span class="event">All Japan AI Hackathon</span><span class="dot"> · </span><span class="detail">youngest team to reach the national finals</span></li><li hidden><b>Poster</b><span class="comma">, </span><span class="event">IBIS2026 Information-Based Induction Sciences Workshop</span></li><li hidden><b>Special Award</b><span class="comma">, </span><span class="event">Global Enterprise Challenge</span><span class="dot"> · </span><span class="detail">Japan round</span></li><li hidden><b>Conrad Innovator</b><span class="comma">, </span><span class="event">Conrad Challenge</span><span class="dot"> · </span><span class="detail">Equinor category</span></li><li hidden><b>Honorable Mention</b><span class="comma">, </span><span class="event">U-21 Research Conference, IEEJ</span></li><li hidden><b>Semifinalist</b><span class="comma">, </span><span class="event">Mynavi Career Koshien</span><span class="dot"> · </span><span class="detail">72 of 3,151 entries</span></li><li hidden><b>Honorable Mention</b><span class="comma">, </span><span class="event">Japanese Olympiad in Informatics</span><span class="dot"> · </span><span class="detail">qualifying round</span></li><li hidden><b>2nd Place</b><span class="comma">, </span><span class="event">FedEx/JA International Trade Challenge Japan</span><span class="dot"> · </span><span class="detail">represented Japan at the Asia-Pacific Finals</span></li><li hidden><b>33rd</b><span class="comma">, </span><span class="event">World Scholar&#39;s Cup Tournament of Champions, Yale</span><span class="dot"> · </span><span class="detail">3 gold medals</span></li><li hidden><b>13th Best Speaker</b><span class="comma">, </span><span class="event">Japan Junior High Parliamentary Debate Tournament</span></li></ul><button class="more" id="moreBtn" type="button" aria-expanded="false" data-shown="6">Show all 16</button></section><section id="contact"><h2>Work with me</h2><div class="contact"><img src="img/portrait.jpg" alt="Portrait of Tomoharu Hayakawa" loading="lazy"><div><p>I&#39;m looking for:</p><ul class="open"><li><span>Rehab clinics and research labs that want to test low-cost decoders</span></li><li><span>Teams building exoskeletons and assistive devices</span></li><li><span>Grants and early funding</span></li></ul><p class="email">tomohayakawa25@gmail.com</p></div></div></section><footer><span class="foot"><span>Tokyo, Japan</span></span><span class="foot"><span>Updated October 2026</span></span></footer>
 </div>
-
 <script>
+/* Annealing field: particles run overdamped Langevin dynamics on a random energy landscape while the temperature cools. */
 (function () {
-  // Show-all toggle
-  var btn = document.getElementById('moreBtn');
-  var items = document.querySelectorAll('#awards li');
-  var open = false;
-  btn.addEventListener('click', function () {
-    open = !open;
-    for (var i = 5; i < items.length; i++) items[i].hidden = !open;
-    btn.textContent = open ? 'Show fewer' : 'Show all ' + items.length;
-    btn.setAttribute('aria-expanded', String(open));
-  });
-
-  // Gradient descent on a small loss surface
-  var cv = document.getElementById('gd');
+  var btn = document.getElementById('anneal');
+  if (!btn) return;
+  var cv = btn.querySelector('canvas');
   var ctx = cv.getContext('2d');
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var S = 168;
-  cv.width = S * dpr; cv.height = S * dpr;
-  ctx.scale(dpr, dpr);
+  var S = 168, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = S * dpr; cv.height = S * dpr; ctx.scale(dpr, dpr);
 
-  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-  function hexToRgb(h) { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join(''); var n = parseInt(h, 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function rgb(h) { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join(''); var n = parseInt(h, 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function gauss() { var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
 
-  // loss surface: tilted bowl with a gentle ripple, domain [-1,1]^2
-  function f(x, y) {
-    return 0.5 * (1.7 * x * x + 0.7 * y * y + 0.9 * x * y) + 0.07 * Math.sin(4 * x) * Math.cos(3 * y) + 0.08 * (x - 0.15);
-  }
-  function grad(x, y) {
-    var h = 1e-3;
-    return [(f(x + h, y) - f(x - h, y)) / (2 * h), (f(x, y + h) - f(x, y - h)) / (2 * h)];
-  }
-
-  var bg = document.createElement('canvas');
-  bg.width = S * dpr; bg.height = S * dpr;
-  var bctx = bg.getContext('2d');
-
-  function bake() {
-    var w = bg.width, hgt = bg.height;
-    var img = bctx.createImageData(w, hgt);
-    var d = img.data;
-    var bgc = hexToRgb(css('--bg')), fgc = hexToRgb(css('--fg')), acc = hexToRgb(css('--accent'));
-    var levels = new Int16Array(w * hgt), fmin = 1e9, fmax = -1e9;
-    var vals = new Float32Array(w * hgt);
-    for (var j = 0; j < hgt; j++) for (var i = 0; i < w; i++) {
-      var x = (i / w) * 2 - 1, y = 1 - (j / hgt) * 2;
-      var v = f(x, y); vals[j * w + i] = v; if (v < fmin) fmin = v; if (v > fmax) fmax = v;
+  // Four wells, the first one deepest, kept apart from each other and from the rim.
+  var W = [];
+  (function makeWells() {
+    for (var tries = 0; tries < 500; tries++) {
+      W = [];
+      for (var i = 0; i < 4; i++) {
+        var a = Math.random() * Math.PI * 2, r = Math.sqrt(0.05 + Math.random() * 0.33);
+        W.push({ x: r * Math.cos(a), y: r * Math.sin(a), d: [1.0, 0.7, 0.62, 0.55][i], s: 0.19 + Math.random() * 0.07 });
+      }
+      var ok = true;
+      for (var p = 0; p < 4; p++) for (var q = p + 1; q < 4; q++) if (Math.hypot(W[p].x - W[q].x, W[p].y - W[q].y) < 0.5) ok = false;
+      if (ok) return;
     }
-    var nLevels = 14;
-    for (var k = 0; k < vals.length; k++) levels[k] = Math.floor((vals[k] - fmin) / (fmax - fmin + 1e-9) * nLevels);
-    var cx = w / 2, cy = hgt / 2, r = w / 2;
-    for (var j2 = 0; j2 < hgt; j2++) for (var i2 = 0; i2 < w; i2++) {
-      var p = j2 * w + i2, o = p * 4;
-      var dx = i2 - cx, dy = j2 - cy;
-      if (dx * dx + dy * dy > r * r) { d[o + 3] = 0; continue; }
-      var t = (vals[p] - fmin) / (fmax - fmin + 1e-9);
-      var edge = (i2 + 1 < w && levels[p + 1] !== levels[p]) || (j2 + 1 < hgt && levels[p + w] !== levels[p]);
-      var mix = edge ? 0.55 : 0.10 + 0.06 * (1 - t);
-      var col = edge ? fgc : acc;
-      d[o] = bgc[0] + (col[0] - bgc[0]) * mix;
-      d[o + 1] = bgc[1] + (col[1] - bgc[1]) * mix;
-      d[o + 2] = bgc[2] + (col[2] - bgc[2]) * mix;
-      d[o + 3] = 255;
+  })();
+  function E(x, y) {
+    var e = 0.35 * (x * x + y * y) + 0.035 * Math.sin(5 * x) * Math.cos(4 * y);
+    for (var i = 0; i < 4; i++) { var w = W[i], dx = x - w.x, dy = y - w.y; e -= w.d * Math.exp(-(dx * dx + dy * dy) / (2 * w.s * w.s)); }
+    return e;
+  }
+  var H = 1e-3;
+  function gx(x, y) { return (E(x + H, y) - E(x - H, y)) / (2 * H); }
+  function gy(x, y) { return (E(x, y + H) - E(x, y - H)) / (2 * H); }
+
+  // Contour map, baked once per theme.
+  var bg = document.createElement('canvas'); bg.width = S * dpr; bg.height = S * dpr;
+  var bctx = bg.getContext('2d'), emin = 0, emax = 1, ACC = '#2456d8', FG = '#171a1f';
+  function bake() {
+    var w = bg.width, h = bg.height, img = bctx.createImageData(w, h), d = img.data;
+    ACC = css('--accent'); FG = css('--fg');
+    var B = rgb(css('--bg')), F = rgb(FG), A = rgb(ACC);
+    var vals = new Float32Array(w * h), lv = new Int16Array(w * h);
+    emin = 1e9; emax = -1e9;
+    for (var j = 0; j < h; j++) for (var i = 0; i < w; i++) {
+      var v = E((i / w) * 2 - 1, 1 - (j / h) * 2); vals[j * w + i] = v;
+      if (v < emin) emin = v; if (v > emax) emax = v;
+    }
+    for (var k = 0; k < vals.length; k++) lv[k] = Math.floor((vals[k] - emin) / (emax - emin + 1e-9) * 16);
+    var cx = w / 2, cy = h / 2, R = w / 2;
+    for (var j2 = 0; j2 < h; j2++) for (var i2 = 0; i2 < w; i2++) {
+      var p = j2 * w + i2, o = p * 4, dx = i2 - cx, dy = j2 - cy;
+      if (dx * dx + dy * dy > R * R) { d[o + 3] = 0; continue; }
+      var t = (vals[p] - emin) / (emax - emin + 1e-9);
+      var edge = (i2 + 1 < w && lv[p + 1] !== lv[p]) || (j2 + 1 < h && lv[p + w] !== lv[p]);
+      var mix = edge ? 0.42 : 0.04 + 0.16 * (1 - t), col = edge ? F : A;
+      d[o] = B[0] + (col[0] - B[0]) * mix; d[o + 1] = B[1] + (col[1] - B[1]) * mix; d[o + 2] = B[2] + (col[2] - B[2]) * mix; d[o + 3] = 255;
     }
     bctx.putImageData(img, 0, 0);
   }
 
-  var pos, vel, trail, steps, pause;
-  function reset() {
-    var a = Math.random() * Math.PI * 2, rr = 0.8 + Math.random() * 0.12;
-    pos = [Math.cos(a) * rr, Math.sin(a) * rr]; vel = [0, 0]; trail = []; steps = 0; pause = 0;
+  // Particles and the annealing schedule (frames at ~60 fps).
+  var N = 56, TRAIL = 7, ETA = 0.004, T0 = 0.25, TEND = 0.004;
+  var HOT = 90, COOL = 480, HOLD = 200, RAMP = 45;
+  var px = new Float32Array(N), py = new Float32Array(N), tx = [], ty = [];
+  for (var n = 0; n < N; n++) {
+    var a0 = Math.random() * Math.PI * 2, r0 = Math.sqrt(Math.random()) * 0.85;
+    px[n] = r0 * Math.cos(a0); py[n] = r0 * Math.sin(a0); tx.push([]); ty.push([]);
   }
-  function toPx(p) { return [(p[0] + 1) / 2 * S, (1 - p[1]) / 2 * S]; }
-
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+  var phase = 'hot', t = 0, T = T0;
+  function temperature() {
+    if (phase === 'ramp') { T = T + (T0 - T) * 0.12; if (++t > RAMP) { phase = 'hot'; t = 0; } }
+    else if (phase === 'hot') { T = T0; if (++t > HOT) { phase = 'cool'; t = 0; } }
+    else if (phase === 'cool') { T = T0 * Math.pow(TEND / T0, t / COOL); if (++t > COOL) { phase = 'hold'; t = 0; } }
+    else { T = TEND; if (++t > HOLD) { phase = 'ramp'; t = 0; } }
+  }
+  function step() {
+    temperature();
+    var amp = Math.sqrt(2 * ETA * T);
+    for (var i = 0; i < N; i++) {
+      var x = px[i], y = py[i];
+      tx[i].push(x); ty[i].push(y); if (tx[i].length > TRAIL) { tx[i].shift(); ty[i].shift(); }
+      var dx = gx(x, y), dy = gy(x, y);
+      x += -ETA * dx + amp * gauss();
+      y += -ETA * dy + amp * gauss();
+      var r = Math.hypot(x, y); if (r > 0.97) { x *= 0.97 / r; y *= 0.97 / r; }
+      px[i] = x; py[i] = y;
+    }
+  }
+  function toPx(v) { return (v + 1) / 2 * S; }
+  function toPy(v) { return (1 - v) / 2 * S; }
+  var tick = 0;
   function draw() {
     ctx.clearRect(0, 0, S, S);
     ctx.drawImage(bg, 0, 0, S, S);
-    var acc = css('--accent');
-    ctx.lineWidth = 1.6; ctx.strokeStyle = acc; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.beginPath();
-    for (var i = 0; i < trail.length; i++) { var q = toPx(trail[i]); if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]); }
-    var cur = toPx(pos); ctx.lineTo(cur[0], cur[1]); ctx.stroke();
-    for (var k = 0; k < trail.length; k += 1) { var q2 = toPx(trail[k]); ctx.beginPath(); ctx.arc(q2[0], q2[1], 1.6, 0, Math.PI * 2); ctx.fillStyle = acc; ctx.fill(); }
-    ctx.beginPath(); ctx.arc(cur[0], cur[1], 4.5, 0, Math.PI * 2); ctx.fillStyle = acc; ctx.fill();
-    ctx.lineWidth = 2; ctx.strokeStyle = css('--bg'); ctx.stroke();
+    var acc = ACC, fg = FG;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (var i = 0; i < N; i++) {
+      var e = (E(px[i], py[i]) - emin) / (emax - emin + 1e-9);
+      var low = e < 0.18;
+      ctx.globalAlpha = 0.35; ctx.strokeStyle = low ? acc : fg; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(toPx(tx[i][0] || px[i]), toPy(ty[i][0] || py[i]));
+      for (var k = 1; k < tx[i].length; k++) ctx.lineTo(toPx(tx[i][k]), toPy(ty[i][k]));
+      ctx.lineTo(toPx(px[i]), toPy(py[i])); ctx.stroke();
+      ctx.globalAlpha = low ? 1 : 0.7;
+      ctx.beginPath(); ctx.arc(toPx(px[i]), toPy(py[i]), low ? 2.4 : 2, 0, Math.PI * 2);
+      ctx.fillStyle = low ? acc : fg; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if (tick++ % 4 === 0) { var out = document.getElementById('temp'); if (out) out.textContent = (T / T0).toFixed(2); }
   }
 
-  function step() {
-    if (pause > 0) { pause--; if (pause === 0) reset(); return; }
-    var g = grad(pos[0], pos[1]);
-    var lr = 0.09, mom = 0.72;
-    vel = [mom * vel[0] - lr * g[0], mom * vel[1] - lr * g[1]];
-    trail.push([pos[0], pos[1]]);
-    pos = [pos[0] + vel[0], pos[1] + vel[1]];
-    steps++;
-    var gn = Math.hypot(g[0], g[1]);
-    if (steps > 70 || (gn < 0.02 && Math.hypot(vel[0], vel[1]) < 0.004)) pause = 40;
-  }
-
-  var frame = 0;
+  var running = false, visible = true;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function loop() {
-    frame++;
-    if (frame % 3 === 0) step();
+    if (!visible || reduce) { running = false; return; }
+    running = true; step();
     draw();
     requestAnimationFrame(loop);
   }
+  function start() { if (!running && !reduce) requestAnimationFrame(loop); }
 
-  bake(); reset();
+  bake();
   if (reduce) {
-    for (var s = 0; s < 40; s++) step();
+    for (var s = 0; s < HOT + COOL; s++) step();
     draw();
-  } else {
-    loop();
+  } else { start(); }
+
+  btn.addEventListener('click', function () {
+    phase = 'ramp'; t = 0;
+    if (reduce) { for (var s2 = 0; s2 < RAMP + HOT + COOL; s2++) step(); draw(); }
+  });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); }).observe(btn);
   }
+  function rebake() { bake(); draw(); }
   var mq = window.matchMedia('(prefers-color-scheme: dark)');
-  if (mq.addEventListener) mq.addEventListener('change', function () { bake(); draw(); });
-  new MutationObserver(function () { bake(); draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (mq.addEventListener) mq.addEventListener('change', rebake);
+  new MutationObserver(rebake).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+
+(function () {
+  var btn = document.getElementById('moreBtn');
+  if (!btn) return;
+  var shown = +btn.dataset.shown, open = false;
+  btn.addEventListener('click', function () {
+    open = !open;
+    var items = document.querySelectorAll('#awards li');
+    for (var i = shown; i < items.length; i++) items[i].hidden = !open;
+    btn.textContent = open ? 'Show fewer' : 'Show all ' + items.length;
+    btn.setAttribute('aria-expanded', String(open));
+  });
 })();
 </script>
 </body>
